@@ -21,7 +21,7 @@ function injectCourse(lang, course) {
                 </div>
                 <div class="Card-content">
                     <div class="Card-content-icon">
-                        <img class="icon" src="${course.iconUrl}" />
+                        <img class="icon" src=".${course.iconUrl}" />
                     </div>
                     <button class="Card-content-btn ${lang} ${course.btnStatus?'allow':'not-allow'}">
                         <a class="Card-content-btn-link" href="${course.btnStatus?course.url:'javascript:;'}">
