@@ -1,0 +1,212 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>开发环境配置</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="01环境配置"
+                  title="开发环境配置"
+                  environment="web"
+                  feedback-link="https://gitee.com/kstalatio">
+    
+      <google-codelab-step label="先决条件" duration="1">
+        <ul>
+<li>一台可以连接互联网（最好可以访问<a href="www.google.com" target="_blank">Google</a>）的计算机，系统要求如下：  <ul>
+<li>64位Microsoft Windows10、8</li>
+<li>最少2GB RAM，推荐8GB RAM</li>
+<li>2.5GB硬盘空间，推荐SSD</li>
+<li>最低屏幕分辨率1024x768</li>
+</ul>
+</li>
+<li>确保您的计算机上已安装有Google chrome、Mozilla Firefox、Microsoft Edge、Apple Safari四种浏览器之一。</li>
+<li>如果您不打算使用IntelliJ IDEA作为IDE，请确保您事先安装有Eclipse、Visual Studio Code和Theia三者之一，本教程不包含前述后三种IDE的安装过程。</li>
+</ul>
+<p>这些先决条件包含了学习本节课程应具备的条件和知识，如果您不符合这些条目，请不必担心，您仍可按照本教程实现您的项目。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="开发工具选择" duration="5">
+        <p>众所周知，微观中国的后端选用Java作为开发语言，Spring Boot作为开发框架，那么支持Spring Boot框架的开发工具有哪些呢？</p>
+<h2 is-upgraded>Spring Tools 4</h2>
+<p>在Spring<a href="https://spring.io/tools" target="_blank">官网</a>中，提供的下一代Spring工具为Spring Tools 4，该工具提供独立的Eclipse版本，也提供插件形式，可集成在Visual Studio Code和Theia中。使用该工具可以进行Spring Boot开发。</p>
+<p>Spring Tools 4有许多特性，举例如下：</p>
+<ul>
+<li>新手教学</li>
+<li>快速代码导航</li>
+<li>智能代码补全</li>
+<li>实时代码检查</li>
+<li>精确的Java Bean信息、报告、配置和细节</li>
+<li>开源，可用于商业用途，但需遵守<a href="https://github.com/spring-projects/sts4/blob/main/license.txt" target="_blank">开源许可证</a></li>
+</ul>
+<h2 is-upgraded>IntelliJ IDEA Ultimate</h2>
+<p>IntelliJ IDEA是一个智能的、上下文感知的IDE，用于在各种应用程序中使用Java和其他JVM语言，如Kotlin、Scala和Groovy。此外，IntelliJ IDEA Ultimate可以帮助你开发全栈式的Web应用，这要归功于它强大的集成工具，对JavaScript和相关技术的支持，以及对Spring、Spring Boot、Jakarta EE、Micronaut、Quarkus、Helidon等流行框架的高级支持。此外，你可以用JetBrains开发的免费插件来扩展IntelliJ IDEA，让你可以使用其他编程语言，包括Go、Python、SQL、Ruby和PHP。</p>
+<p>IntelliJ IDEA提供Community和Ultimate两种版本，其中Community版本是开源免费的，可用于商业用途，Ultimate版本提供30天的免费使用期，试用期过后需要购买许可证方能继续使用，未取得许可证的情况下，使用其从事商业和盈利用途，您将会<strong>收到律师函</strong>。</p>
+<h2 is-upgraded>如何获得Intellij IDEA Ultimate免费许可证</h2>
+<ol type="1">
+<li>对于在校学生和教育工作者，验证自己的大学或学院的域名电子邮件或ISIC卡后即可获得1年的免费试用期，您可以在即将到期前进行续订。</li>
+<li>对于已经毕业的学生和教育工作者可凭在校时执照获得25%的毕业生专属折扣。</li>
+<li>对于非商业开源项目的负责人和项目核心人员，在通过项目资格审查后可获得1年的免费使用期，如要继续使用，需重新审核您(或您参与)的项目。</li>
+<li>对于大学、学院、学校和非商业教育组织在获得认证后可以获得1年免费许可，在教室和计算机实验室中安装所有 JetBrains 工具，您可及时续订。</li>
+<li>对于商业IT培训机构、训练营、编程学校和在线学习计划的讲师，可以获得与学生共享的免费许可证，有效期至课程结束，最长6个月。</li>
+</ol>
+<aside class="warning"><p>即使您通过以上方式取得免费许可证，也不能用作商业用途，各种许可证的适用范围及未尽事宜请参阅<a href="https://www.jetbrains.com/zh-cn/idea/buy/#discounts" target="_blank">订阅选项与定价</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="安装IntelliJ IDEA Ultimate" duration="15">
+        <p>在这一部分，我们将了解IntelliJ IDEA，并将其Ultimate版本安装在您自己的个人计算机中。该教程以Windows操作系统为例，IntelliJ IDEA Ultimate（以下简称IDEA）也提供macOS和Linux版本，您可根据自己的系统环境自行选择。以下两种安装IDEA的方式，您可任选其一完成。</p>
+<h2 is-upgraded>通过Toolbox App安装IDEA</h2>
+<p>您可以选择使用Jetbrain Toolbox App（以下简称Toolbox App）进行下载，它是集中管理Jetbrain各种IDE的工具箱，使用它可以快速轻松地更新、回滚或是维护多个版本的IDE工具，通过点击下面按钮以转到Toolbox App下载页。</p>
+<p><a href="https://www.jetbrains.com/zh-cn/toolbox-app/" target="_blank"><paper-button class="colored" raised>下载Toolbox App</paper-button></a></p>
+<p>Toolbox App下载完成后，双击下载好的安装包开始安装。</p>
+<p class="image-container"><img alt="image-即将安装Toolbox App" src="img\\bc77b7488fe9101b.png"></p>
+<p>点击安装后，会自行安装到您的计算机，同时桌面会多出Toolbox App的桌面快捷方式。</p>
+<p class="image-container"><img alt="image-正在安装Toolbox App" src="img\\2c5972af7ead6f30.png"></p>
+<p class="image-container"><img alt="image-Toolbox App安装成功" src="img\\e8d7e374e0e8f708.png"></p>
+<aside class="special"><p>如果没有在桌面找到其快捷方式，请在Windows开始菜单查看。</p>
+</aside>
+<p>双击Toolbox App，该工具会在系统托盘运行，界面如下所示：</p>
+<p class="image-container"><img alt="image-20220119154155340" src="img\\edf7569e715153ea.png"></p>
+<p>在下载IDEA之前，请点击右上角进入设置界面，将<code>工具安装位置</code>选项设置为您自己的路径(尽量不要设置为系统盘)。</p>
+<p class="image-container"><img alt="image-Toolbox App设置界面" src="img\\98cc3caf75cfc1fe.png"></p>
+<p>修改完成后返回主界面，点击IDEA旁边的<code>安装</code>按钮，即可自动为您安装最新版本的IDEA。点击IDEA条目本身，则会进入介绍和版本选择页面，这对于想要安装历史版本的用户来说十分方便。</p>
+<p class="image-container"><img alt="image-安装Toolbox 历史版本" src="img\\b8ffaff265c6b779.png"></p>
+<p>等待IDEA安装下载完成并安装完毕。</p>
+<h2 is-upgraded>通过官网直接下载IDEA</h2>
+<p>您也可以选择在官网直接下载IDEA安装包，一般来说，最新版本包含新功能界面和安全补丁，有着显著的性能提升。当然，您也可以选择下载历史版本。</p>
+<p><a href="https://www.jetbrains.com/zh-cn/idea/download/" target="_blank"><paper-button class="colored" raised>下载IDEA</paper-button></a></p>
+<p>下载完成后，双击安装包打开安装界面，点击<code>Next></code>选项进入下一步，</p>
+<p class="image-container"><img alt="image-IDEA即将安装界面" src="img\\4b525ba03c9d3acf.png"></p>
+<p>接下来，安装程序会让您选择若干选项，只需直接点击<code>Next></code>选项即可。</p>
+<aside class="warning"><p>需要注意的是，在问及您需要安装至计算机上的何处时，尽量不要选择安装在系统盘，当然这并不是强制措施，如果您的系统盘存储空间足够大，当然可以安装在那里。</p>
+</aside>
+<p>最后一步点击<code>Install</code>，IDEA会很快完成整个安装过程。</p>
+<p class="image-container"><img alt="image-IDEA启动画面" src="img\\de0616cbc7cece58.png"></p>
+<p>安装完成后，本课程后续小节您可作为额外内容浏览，这意味着您完成了本课程的全部内容🎉。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="下载Spring Tools 4" duration="10">
+        <p>需要再次说明的是，如果您安装了IDEA，请跳过本节内容。</p>
+<h2 is-upgraded>在Eclipse中使用Spring Tools 4</h2>
+<p>点击下方按钮进行下载。选择Spring Tools 4 for Eclipse，然后根据您的计算机选择合适的版本。Spring Tools 4 for Eclipse提供Windows、macOS和Linux版本。</p>
+<p><a href="https://spring.io/tools" target="_blank"><paper-button class="colored" raised>下载Spring Tools 4 for Eclipse</paper-button></a></p>
+<p>下载完成后，双击下载完成的<code>*.jar</code>文件，软件会自行解压。</p>
+<p class="image-container"><img alt="image-spring tools 4解压过程" src="img\\7808640d1e39aad1.png"></p>
+<p>解压完成后，会在与jar包文件同级目录下生成<code>sts-x.xx.x.RELEASE</code>文件夹，打开文件夹，双击<code>SpringToolSuite4.exe</code>文件即可运行。</p>
+<p class="image-container"><img alt="image-运行Spring Tools 4" src="img\\45f0020e52ba257b.png"></p>
+<p class="image-container"><img alt="image-Spring boot suite 4启动画面" src="img\\1515302dfa5dea0.png"></p>
+<aside class="special"><p>关于解压路径问题，您可以将解压后的文件放在任何地方，但最好与各种程序安装路径相同。您可以将<code>SpringToolSuite4.exe</code>创建快捷方式至桌面，这样就不必通过寻找文件夹来打开软件了。</p>
+</aside>
+<h2 is-upgraded>在Visual Studio Code中使用Spring Tools 4</h2>
+<p>在Visual Studio Code中的扩展商店中搜索<code>Spring Boot Extension Pack</code>，点击安装即可。</p>
+<p class="image-container"><img alt="image-vscode中的spring插件" src="img\\74ca961725d245dc.png"></p>
+<aside class="warning"><p>选择Visual studio code作为IDE需确保您的计算机中已安装有Java开发环境(jdk)。</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="常见问题" duration="10">
+        <h3 is-upgraded><strong>Q：我使用Windows7系统，可以安装IDEA吗？</strong></h3>
+<p>最新版IDEA不支持Windows7系统，您可以安装历史版本，如果您不知道应安装哪种版本，请安装Toolbox App，它会帮您选择。</p>
+<h3 is-upgraded><strong>Q：我的计算机上没有安装课程中提到的四种浏览器中的任何一个，我使用其它浏览器，可以吗？</strong></h3>
+<p>当然，如果使用其它浏览器，请确保为最新版本。之所以作为先决条件，是因为如果要真正从事Web开发，应选用它们，它们包含最新的技术支持，这可以避免许多麻烦。</p>
+<h3 is-upgraded><strong>Q：我选择安装IntelliJ IDEA Community可以吗？</strong></h3>
+<p>Community版本虽然为开源软件，可免费试用，但仅支持纯Java开发，不提供对Java Web的支持，换言之，不提供对Spring和Spring Boot的支持，请安装Ultimate版本，它包含对Spring的全方位支持。</p>
+<h3 is-upgraded><strong>Q：我是Windows用户，安装软件时，我不知道如何选择安装路径？</strong></h3>
+<p>推荐您选择非系统盘下的根目录<code>Program Files</code>或<code>Program Files (x86)</code>，在里面创建名为您的软件名称的子文件夹，然后选择此文件夹作为安装路径。</p>
+<h3 is-upgraded><strong>Q：我通过特殊手段获得了IDEA的免使使用权，可以吗？</strong></h3>
+<p>勿以善小而不为。请支持正版软件，打击非法侵害互联网软件权益的违法行为。</p>
+<h3 is-upgraded><strong>Q：我选择安装Spring Tools 4，下载完成后点击</strong><strong><code>*.jar</code></strong><strong>弹出</strong><strong><code>选择打开程序</code></strong><strong>对话框，如何解决？</strong></h3>
+<p>这是因为您的计算机中没有Java环境，有两种解决办法：</p>
+<ol type="1">
+<li>安装Java环境(jdk)。</li>
+<li>将其作为压缩包使用解压软件打开，找到<code>contents.zip</code>文件，将此文件解压出来即可。</li>
+</ol>
+<p class="image-container"><img alt="image-解压Spring Tools 4" src="img\\68ed45897751e571.png"></p>
+<h3 is-upgraded><strong>Q：我安装了IDEA或Spring Tools 4，但是Java在哪？我需要自己额外下载Java环境吗？</strong></h3>
+<p>您只有在使用Visual Studio Code进行Java开发时才需要额外下载Java环境，IDEA和Spring Tools 4 for Eclipse已经内置了Java环境。</p>
+<h3 is-upgraded><strong>Q：我从事过Java Web开发，请问maven、tomcat这些工具需要额外安装吗？</strong></h3>
+<p>您可能没有使用Spring Boot开发过Java Web程序，这些工具都已经内置在IDEA或Spring Tools 4中。</p>
+<h3 is-upgraded><strong>Q：我应该如何选择IDE？</strong></h3>
+<p>本套课程选用IDEA作为教学开发环境IDE。如果您对Eclipes或者Visual Studio Code情有独钟，请选择属于您的IDE.</p>
+<h3 is-upgraded><strong>Q：IDE和IDEA有什么关系？</strong></h3>
+<p>IDE(Integrated Development Environment)全称为<strong>集成开发环境</strong>，是用于提供程序开发环境的应用程序，一般包括代码编辑器、编译器、调试器和图形用户界面等工具。集成了代码编写功能、分析功能、编译功能、调试功能等一体化的开发软件服务套。所有具备这一特性的软件或者软件套（组）都可以叫集成开发环境。如微软的Visual Studio系列，Borland的C++ Builder、Delphi系列、Jetbrain的IDEA等。该程序可以独立运行，也可以和其它程序并用，大大方便了开发者。</p>
+<p>如果您仍有其它疑问，请查阅互联网或与我们取得联系。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="完成了！" duration="1">
+        <p>🎉恭喜您已经完成本课程的全部内容！通过本节课程，您已经学会了以下事情：</p>
+<ul>
+<li>可以从事Java开发的软件有哪些</li>
+<li>如何下载和安装IDE</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="扩展阅读" duration="5">
+        <p>了解更多IDEA：</p>
+<ul>
+<li><a href="https://www.jetbrains.com/zh-cn/idea" target="_blank">IntelliJ IDEA官方网站</a></li>
+<li><a href="https://blog.jetbrains.com" target="_blank">Jetbrain官方博客</a></li>
+<li><a href="https://www.jetbrains.com/help/idea/discover-intellij-idea.html" target="_blank">IDEA官方文档</a></li>
+</ul>
+<p>了解更多Spring Boot：</p>
+<ul>
+<li><a href="https://spring.io/projects/spring-boot" target="_blank">Spring Boot官方文档</a>（英文）</li>
+<li><a href="https://tanzu.vmware.com/content/webinars/feb-1-whats-new-in-spring-boot-2-6" target="_blank">Spring Boot 2.6有哪些新特性</a>（英文）</li>
+<li><a href="https://spring.io/tools" target="_blank">Spring Tools 4特性简介</a>（英文）</li>
+<li><a href="https://github.com/spring-projects/spring-boot" target="_blank">Spring Boot官方代码存储库</a>（英文）</li>
+<li><a href="https://stackoverflow.com/questions/tagged/spring-boot" target="_blank">Spring Boot在stackoverflow的讨论区</a>（英文）</li>
+<li><a href="https://spring.io/blog" target="_blank">Spring Boot官方博客</a>（英文）</li>
+</ul>
+<p>课程推荐：</p>
+<ul>
+<li><a href="https://juejin.cn/book/6857911863016390663" target="_blank">从0开始学习Spring</a></li>
+<li><a href="https://juejin.cn/book/6844733814560784397" target="_blank">SpringBoot 源码解读与原理分析</a></li>
+<li><a href="https://juejin.cn/book/6844733814074245133" target="_blank">Spring Boot 大型线上商城项目实战教程</a></li>
+<li><a href="https://ke.segmentfault.com/course/1650000011063780" target="_blank">Java微服务实践-Spring Boot系列</a></li>
+<li><a href="https://edu.aliyun.com/roadmap/java" target="_blank">阿里云全球培训中心-Java学习路线</a></li>
+</ul>
+<p>项目推荐</p>
+<ul>
+<li><a href="https://github.com/newbee-ltd/newbee-mall" target="_blank">newbee-mail-一个基于Spring Boot 2.x的电商系统</a></li>
+<li><a href="https://github.com/wuyouzhuguli/SpringAll" target="_blank">SpringAll-Spring全家桶教程</a></li>
+<li><a href="https://github.com/alibaba/p3c/blob/master/Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E5%B5%A9%E5%B1%B1%E7%89%88%EF%BC%89.pdf" target="_blank">阿里巴巴Java开发手册</a>（pdf）</li>
+</ul>
+<p>博客相关</p>
+<ul>
+<li><a href="https://hellogithub.com/periodical/volume/" target="_blank">HelloGitHub每周推荐GitHub新项目</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>

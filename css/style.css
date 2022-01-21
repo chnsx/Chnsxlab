@@ -1,0 +1,54 @@
+.success {
+    color: #1e8e3e;
+  }
+  .error {
+    color: red;
+  }
+  google-codelab #codelab-title{
+      box-shadow: none;
+      border-bottom: 1px #f1f3f4 solid;
+  }
+  google-codelab #codelab-title:hover{
+      box-shadow: 0px 0px 4px 0px rgb(60 64 67 / 30%)
+  }
+  google-codelab #drawer .steps{
+      background-color: white;
+  }
+  google-codelab #drawer ol{
+      padding: 16px 12px 16px 0px;
+  }
+  google-codelab #drawer ol li a{
+      border-radius: 0rem 2rem 2rem 0rem !important;
+      padding: 0.1rem 1rem 0.1rem 1rem;
+  }google-codelab #drawer .metadata{
+      background-color: white;
+  }
+  google-codelab #drawer ol li a{
+      border: 0px;
+      color: black;
+  }
+  google-codelab #drawer ol li a:hover {
+      background-color: #f1f3f4;
+
+  }
+  google-codelab #drawer ol li[selected] a, google-codelab #drawer ol li a:focus {
+      box-shadow: none;
+  }
+  google-codelab-step .instructions .inner {
+      padding: 3rem 4rem;
+  }
+  google-codelab:not([theme="minimal"]) google-codelab-step .instructions{
+      box-shadow: none;
+  }
+  #previous-step, #next-step, #done{
+      border-radius: 2rem;
+      line-height: 28px;
+      box-shadow: none;
+      border: 1px #f1f1f1 solid;
+  }
+
+  @media screen and (max-width:425px) {
+    google-codelab-step .instructions .inner {
+        padding: 24px;
+    }
+  }

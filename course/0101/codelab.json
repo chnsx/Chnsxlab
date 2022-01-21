@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-01-20T15:01:34+08:00",
+  "id": "01环境配置",
+  "duration": 47,
+  "title": "开发环境配置",
+  "summary": "微观中国后端开发环境配置",
+  "source": ".\\setup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "软件安装",
+    "环境配置"
+  ],
+  "tags": [],
+  "feedback": "https://gitee.com/kstalatio",
+  "url": "01环境配置"
+}

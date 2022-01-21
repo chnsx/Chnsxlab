@@ -1,0 +1,22 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-01-20T20:00:27+08:00",
+  "id": "02创建Spring Boot项目",
+  "duration": 91,
+  "title": "Spring Boot初体验",
+  "summary": "Spring Boot初体验",
+  "source": ".\\createDemo.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring boot"
+  ],
+  "tags": [],
+  "feedback": "https://github.com/chnsx",
+  "url": "02创建Spring Boot项目"
+}

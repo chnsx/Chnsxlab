@@ -1,0 +1,14 @@
+{
+    "java": "#ff7f50",
+    "javaweb": "#ff7f50",
+    "python": "#3572a5",
+    "cpp": "#f34b7d",
+    "spring": "#41b883",
+    "c": "#000000",
+    "javascript": "#f1e05a",
+    "springboot": "#6db33f",
+    "git":"#f44d27",
+    "vue":"#41b883",
+    "echarts":"#a9314d",
+    "database":"#0b5975"
+}

@@ -1,0 +1,445 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Spring Boot初体验</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <link rel="stylesheet" href="../0102/style.css">
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="02创建Spring Boot项目"
+                  title="Spring Boot初体验"
+                  environment="web"
+                  feedback-link="https://github.com/chnsx">
+    
+      <google-codelab-step label="先决条件" duration="3">
+        <ul>
+<li>掌握Java基础知识，熟悉JavaSE(Standard Edition)相关知识。</li>
+<li>掌握JavaEE(Enterprise Edition)内容，理解原生Java Web开发流程,最好有实战经验。</li>
+<li>掌握spring核心概念（IOC和DI）</li>
+<li>熟练运用浏览器的开发者工具。</li>
+<li>了解Java自定义注解和反射相关知识。</li>
+<li>了解maven、tomcat工具的使用流程。</li>
+<li>了解Restful风格、接口、api等相关概念。</li>
+</ul>
+<p>这些先决条件包含了学习本节课程应具备的条件和知识，如果您不符合这些条目，请不必担心，您仍可按照本教程实现您的项目。</p>
+<google-codelab-survey survey-id="02创建Spring Boot项目-1">
+<h4>你拥有过怎样的Java Web开发经验？</h4>
+<paper-radio-group>
+<paper-radio-button>我完全没有听说过Java是什么</paper-radio-button>
+<paper-radio-button>我只开发过Java console控制台程序</paper-radio-button>
+<paper-radio-button>我只开发过原生Java Web程序</paper-radio-button>
+<paper-radio-button>我同时开发Spring程序和原生Java Web程序</paper-radio-button>
+<paper-radio-button>我使用Spring Boot开发Java Web程序</paper-radio-button>
+<paper-radio-button>我是全栈开发工程师，熟练使用Spring Boot和各种前端技术</paper-radio-button>
+</paper-radio-group>
+</google-codelab-survey>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="了解Spring技术" duration="10">
+        <p>Spring由Rod Johnson创立，2004年发布了Spring框架的第一版，其目的是用于简化企业级应用程序开发的难度和周期。它是目前主流的Java Web开发框架，是Java世界最为成功的框架。该框架是一个轻量级的开源框架，具有很高的凝聚力和吸引力。</p>
+<p>Spring框架不局限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何 Java 应用都可以从 Spring 中受益。Spring 框架还是一个超级粘合平台，除了自己提供功能外，还提供粘合其他技术和框架的能力。</p>
+<p>Spring的核心是一个容器，通常称为Spring应用程序上下文，用于创建和管理应用程序组件。这些组件（或bean）在Spring应用程序上下文中连接在一起以构成一个完整的应用程序，就像将砖、灰浆、木材、钉子、管道和电线绑在一起以组成房屋。除了其核心容器之外，Spring和完整的相关库产品组合还提供Web框架、各种数据持久性选项、安全框架与其他系统的集成、运行时监视、微服务支持、响应式编程模型以及许多其他功能，应用于现代应用程序开发。</p>
+<p>Spring Boot是整合Spring技术栈的一站式框架，是简化Spring技术栈的快速开发脚手架。它通过自动装配Java Bean，使用Java注解进行默认配置约定，大大减少了构建应用程序所需的显式配置（无论是 XML 还是 Java）的数量。</p>
+<p>Spring Boot极大地增强了Spring开发的能力，很难想象没有它如何开发Spring应用程序。因此，该教程将Spring和Spring Boot视为一模一样。我们将尽可能使用 Spring Boot，并仅在必要时使用显式配置。而且，由于Spring XML配置是使用 Spring的老派方式，因此我们将主要关注基于Java的Spring配置。</p>
+<aside class="special"><p>该小节部分内容节选自<a href="https://www.manning.com/books/spring-in-action-sixth-edition" target="_blank">Spring实战(第6版) MEAP</a>(manning)</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="创建Spring Boot项目" duration="5">
+        <h2 is-upgraded>您将搭建一个怎样的项目</h2>
+<p>该教程将帮助您搭建一个简单的Spring Boot程序，它将在您使用浏览器访问<a href="http://localhost:8080" target="_blank">localhost:8080/hello</a>网址时，向网页输出<code>Hello,Spring Boot!</code>字符串。</p>
+<p class="image-container"><img alt="image-访问hello路径" src="img\\d0bf9535c2f75494.png"></p>
+<h2 is-upgraded>创建hello项目</h2>
+<p>创建Spring Boot项目最简单的方式是通过浏览器访问<a href="http://start.spring.io" target="_blank">spring initializr</a>网站，这会创建一个全新的空白Spring Boot项目，您需要在Project单选组件中勾选<code>Maven Project</code>，在Language单选组件中勾选<code>Java</code>，在Spring Boot单选组件中勾选<code>2.6.2</code>，Project Metadata中所填的内容见下图，在Packaging单选组件中勾选<code>Jar</code>，在Java组件中勾选<code>8</code>。</p>
+<p class="image-container"><img alt="image-创建Spring Boot项目" src="img\\ae031b4a7856f65f.png"></p>
+<p>之后，在网站右侧Dependencies选项卡中单击<code>ADD DEPENDENCIES</code>按钮，在出现的条目中，选择<code>Spring Web</code>选项，现在您的网页中的内容应该像这样：</p>
+<p class="image-container"><img alt="image-为Spring Boot项目添加依赖" src="img\\5d6a63f8eea5c4d.png"></p>
+<p>接下来点击网页下方的<code>GENERATE</code>按钮，浏览器会下载名为<code>hello.zip</code>的文件，待下载完成后，将其解压到您的硬盘上。现在您已经创建了一个名为hello的Spring Boot项目。该文件夹下的文件分布结构应如下所示：</p>
+<pre><code>hello:.
+│  .gitignore
+│  HELP.md
+│  mvnw
+│  mvnw.cmd
+│  pom.xml
+│
+├─.mvn
+│  └─wrapper
+│          maven-wrapper.jar
+│          maven-wrapper.properties
+│
+└─src
+    ├─main
+    │  ├─java
+    │  │  └─com
+    │  │      └─iceberry
+    │  │          └─hello
+    │  │                  HelloApplication.java
+    │  │
+    │  └─resources
+    │          application.properties
+    │
+    └─test
+        └─java
+            └─com
+                └─iceberry
+                    └─hello
+                            HelloApplicationTests.java
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="使用IDEA运行hello项目" duration="15">
+        <p>打开IDEA，点击<code>Open</code>按钮，选择您刚才创建的hello项目，点击<code>OK</code>按钮，这时，IEDA会自动下载项目所需要的依赖项。</p>
+<p class="image-container"><img alt="image-IEDA打开hello项目" src="img\\33e32ea2bbd1ff72.png"></p>
+<p class="image-container"><img alt="image-IDEA下载hello项目的依赖项" src="img\\cf7ce358b1f9abfd.png"></p>
+<p>待下载完成后，您可以点击右上角的▶按钮，这将启动您的hello项目，尽管我们到目前为止没有编写任何一行代码，但程序是能够运行的。运行成功后，您的控制台输出应和下面类似：</p>
+<pre><code language="language-yml" class="language-yml">  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.6.2)
+
+2022-01-20 13:57:49.031  INFO 16856 --- [           main] com.iceberry.hello.HelloApplication      : Starting HelloApplication using Java 13.0.1 on
+2022-01-20 13:57:49.031  INFO 16856 --- [           main] com.iceberry.hello.HelloApplication      : No active profile set, falling back to default profiles: default
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-01-20 13:57:49.844  WARN 16856 --- [           main] o.a.catalina.core.AprLifecycleListener   : This listener must only be nested within Server elements, but is in [TomcatEmbeddedContext].
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] o.a.catalina.core.AprLifecycleListener   : An older version [1.2.23] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [1.2.30]
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.23] using APR version [1.7.0].
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [false].
+2022-01-20 13:57:49.844  INFO 16856 --- [           main] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2022-01-20 13:57:49.859  INFO 16856 --- [           main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1c  28 May 2019]
+2022-01-20 13:57:49.922  INFO 16856 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-01-20 13:57:49.922  INFO 16856 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 844 ms
+2022-01-20 13:57:50.464  INFO 16856 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path &#39;&#39;
+2022-01-20 13:57:50.479  INFO 16856 --- [           main] com.iceberry.hello.HelloApplication      : Started HelloApplication in 1.809 seconds (JVM running for 2.652)
+</code></pre>
+<p>此时使用您的浏览器打开网址<a href="http://localhost:8080" target="_blank">localhost:8080</a>，您应该可以看到如下界面：</p>
+<p class="image-container"><img alt="image-Spring启动页面" src="img\\d9e45bd40dfaf1a5.png"></p>
+<aside class="special"><p>页面上出现了Error和404字样，请不要认为程序出错了，这只是因为我们的程序没有设置访问路径与页面的映射（路由），所以展示了一个空白的信息页面。</p>
+</aside>
+<p>现在请点击右上角的◼按钮停止我们的项目，现在让我们打开<code>src/main/java/com/iceberry/demo</code>目录下的<code>HelloApplication.java</code>文件，我们发现里面已经有一些代码，现在向里面输入一些代码，使得该文件的内容如下所示：</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.hello;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+@RestController
+public class HelloApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HelloApplication.class, args);
+	}
+
+	@GetMapping(&#34;/hello&#34;)
+	public String hello(){
+		return &#34;Hello,Spring Boot!&#34;;
+	}
+}
+</code></pre>
+<p>我们再次启动项目，现在使用浏览器访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，您应该看到如下内容：</p>
+<p class="image-container"><img alt="image-访问hello路径" src="img\\d0bf9535c2f75494.png"></p>
+<p><strong>现在根据您对当前代码的观察，尝试回答以下问题：</strong></p>
+<ul>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出<code>Hello,world!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/greeting" target="_blank">localhost:8080/greeting</a>，使网页输出<code>Hello,Spring Boot!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出的<code>Hello,world!</code>字符串为红色。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出当前时间戳。</li>
+<li>尝试将端口号8080更改为8081，使得仍然可以达到同样的效果。</li>
+<li>除了访问网址localhost，还可以访问哪些网址也能达到同样的效果？</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="使用Eclipse运行hello项目" duration="12">
+        <p>启动Spring Tools 4 for Eclipse，点击<code>File</code>选项卡，选择<code>Open Projects from File System</code>选项，在弹出的对话框中点击<code>Directory</code>按钮，选择创建好的hello项目，然后点击<code>Finish</code>完成项目导入。随后Ecplise会自动下载依赖。</p>
+<p class="image-container"><img alt="image-向Spring Tools 4 for Ecplise导入项目" src="img\\49519fe17094a6c.png"></p>
+<p class="image-container"><img alt="image-向Ecplise导入项目" src="img\\a598ff9153c0f214.png"></p>
+<p>打开<code>src/main/java/com.iceberry.hello/HelloApplication.java</code>文件，它现在应该有如下内容：</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.hello;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HelloApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HelloApplication.class, args);
+	}
+
+}
+</code></pre>
+<p>现在请点击<code>Run></code>选项，选择<code>Run As Spring Boot App</code>，这将启动您的hello项目。</p>
+<p class="image-container"><img alt="image-在Ecplise启动hello项目" src="img\\4aa282926c815055.png"></p>
+<p>启动后您的控制台应有如下类似输出：</p>
+<p class="image-container"><img alt="image-控制台输出" src="img\\c60c3e8997df6665.png"></p>
+<p>此时使用您的浏览器打开<a href="http://localhost:8080" target="_blank">localhost:8080</a>,您应该可以看到如下界面：</p>
+<p class="image-container"><img alt="image-Spring启动页面" src="img\\d9e45bd40dfaf1a5.png"></p>
+<aside class="special"><p>页面上出现了Error和404字样，请不要认为程序出错了，这只是因为我们的程序没有设置访问路径与页面的映射（路由），所以展示了一个空白的信息页面。</p>
+</aside>
+<p>现在，请点击左下角◼按钮停止我们的项目，向<code>HelloApplication.java</code>中添加一些代码，添加后，它应该如下所示：</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.hello;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+@RestController
+public class HelloApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HelloApplication.class, args);
+	}
+
+	@GetMapping(&#34;/hello&#34;)
+	public String hello(){
+		return &#34;Hello,Spring Boot!&#34;;
+	}
+}
+</code></pre>
+<p>重新启动您的项目，现在请访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，您应该看到网页中有如下内容：</p>
+<p class="image-container"><img alt="image-访问hello路径" src="img\\d0bf9535c2f75494.png"></p>
+<p><strong>现在根据您对当前代码的观察，尝试回答以下问题：</strong></p>
+<ul>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出<code>Hello,world!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/greeting" target="_blank">localhost:8080/greeting</a>，使网页输出<code>Hello,Spring Boot!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出的<code>Hello,world!</code>字符串为红色。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出当前时间戳。</li>
+<li>尝试将端口号8080更改为8081，使得仍然可以达到同样的效果。</li>
+<li>除了访问网址localhost，还可以访问哪些网址也能达到同样的效果？</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="对代码的理解" duration="10">
+        <p>这是一个典型的Java程序，主函数<code>main</code>中调用SpringApplication类上的静态<code>run</code>方法，即可启动整个项目。我们添加的<code>Hello()</code>方法是一个空参、返回值为String类型的方法。这与平时我们经常见到的Java代码并没有不同。那么是什么使得它成为一个Java Web程序呢？关键在于添加在类前和方法前的三个注解。</p>
+<ul>
+<li><code>@SpringBootApplication</code>注解可作用在整个项目的主类上，用来标识该项目为一个Spring Boot项目。它是一个复合注解，包含以下三个注解：  <ul>
+<li><code>@SpringBootConfiguration</code>：作用在类上会使得该类成为配置类。此注解是注解<code>@Configuration</code>的一种特殊形式，它允许在 Spring 上下文中注册额外的 bean 或导入其他配置类。</li>
+<li><code>@EnableAutoConfiguration</code>：启用Spring自动配置，此注解启用 SpringBoot 的自动配置机制告诉 Spring Boot 自动配置它认为需要的任何组件。</li>
+<li><code>@ComponentScan</code>：启用组件扫描，所有被<code>@Component</code>、<code>@Controller</code>、<code>@Service</code>等注解的类，均会被Spring自动扫描，并将它们注册为Spring应用程序上下文中的组件。</li>
+</ul>
+</li>
+<li><code>@RestController</code>注解表示这是个控制器bean,并且是将函数的返回值直接填入HTTP响应体中,是 REST 风格的控制器。它是一个复合注解，包含以下两个注解：  <ul>
+<li><code>@Controller</code>：单独在方法上使用此注解表示该方法返回的是一个视图（View），是在前后端不分离的情况下使用的。</li>
+<li><code>@ResponseBody</code>：该注解的作用是将 <code>Controller</code> 的方法返回的对象通过适当的转换器转换为指定的格式之后，写入到HTTP 响应（Response）对象的body中，通常用来返回 JSON或者XML数据，返回JSON数据的情况比较多。</li>
+</ul>
+</li>
+<li><code>@GetMapping("/xxx")</code>注解表示接收到根路径<code>/xxx</code>的HTTP GET请求后，处理该请求，给客户端以响应数据<code>Response</code>。前述实示例中，只是简单的返回<code>Hello,Spring Boot!</code>字符串，其它什么也不做。它的作用等价于<code>@RequestMapping(value="/xxx",method=RequestMethod.GET)</code>注解</li>
+</ul>
+<aside class="special"><p>如果您想了解更多Spring中的注解，可以阅览以下内容：<a href="https://juejin.cn/post/6844904136492711950" target="_blank">接近8000字的Spring/Spring常用注解总结！安排！</a></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="SpringBoot初始化实例的源码分析" duration="20">
+        <p>前述示例在main方法中调用了以下代码，即可启动一个Spring Boot项目：</p>
+<pre><code language="language-java" class="language-java">SpringApplication.run(HelloApplication.class, args);
+</code></pre>
+<p>那么，<code>run()</code>方法背后究竟为我们做了哪些初始化工作呢？我们将鼠标移到<code>run()</code>方法上，按住键盘的<code>ctrl</code>键，点击进入<code>run()</code>方法的源码，可以看到如下代码：</p>
+<pre><code language="language-java" class="language-java">/**
+ * Static helper that can be used to run a {@link SpringApplication} from the
+ * specified source using default settings.
+ * @param primarySource the primary source to load
+ * @param args the application arguments (usually passed from a Java main method)
+ * @return the running {@link ApplicationContext}
+ */
+public static ConfigurableApplicationContext run(Class&lt;?&gt; primarySource, String... args) {
+	return run(new Class&lt;?&gt;[] { primarySource }, args);
+}
+</code></pre>
+<p>可见，<code>run()</code>方法位于<code>SpringApplication</code>类中，是一个静态方法，通过查看该方法的注释可以看到第一个形参primarySource为类类型，功能是加载主要的资源类，第二个为String类型的不定参args,它表示传递给应用的命令参数。整个方法的作用为先用主要资源类来实例化一个 SpringApplication 对象，再调用这个对象的 run 方法。</p>
+<p>我们跟着上面的<code>run()</code>方法进入到<code>run()</code>方法本身：</p>
+<pre><code language="language-java" class="language-java">/**
+ * Static helper that can be used to run a {@link SpringApplication} from the
+ * specified sources using default settings and user supplied arguments.
+ * @param primarySources the primary sources to load
+ * @param args the application arguments (usually passed from a Java main method)
+ * @return the running {@link ApplicationContext}
+ */
+public static ConfigurableApplicationContext run(Class&lt;?&gt;[] primarySources, String[] args) {
+	return new SpringApplication(primarySources).run(args);
+}
+</code></pre>
+<p>接着进入<code>SpringApplicatin</code>的定义中，可以看到如下代码：</p>
+<pre><code language="language-java" class="language-java">/**
+ * Create a new {@link SpringApplication} instance. The application context will load
+ * beans from the specified primary sources (see {@link SpringApplication class-level}
+ * documentation for details). The instance can be customized before calling
+ * {@link #run(String...)}.
+ * @param primarySources the primary bean sources
+ * @see #run(Class, String[])
+ * @see #SpringApplication(ResourceLoader, Class...)
+ * @see #setSources(Set)
+ */
+public SpringApplication(Class&lt;?&gt;... primarySources) {
+	this(null, primarySources);
+}
+
+/**
+ * Create a new {@link SpringApplication} instance. The application context will load
+ * beans from the specified primary sources (see {@link SpringApplication class-level}
+ * documentation for details). The instance can be customized before calling
+ * {@link #run(String...)}.
+ * @param resourceLoader the resource loader to use
+ * @param primarySources the primary bean sources
+ * @see #run(Class, String[])
+ * @see #setSources(Set)
+ */
+@SuppressWarnings({ &#34;unchecked&#34;, &#34;rawtypes&#34; })
+public SpringApplication(ResourceLoader resourceLoader, Class&lt;?&gt;... primarySources) {
+	this.resourceLoader = resourceLoader;
+	Assert.notNull(primarySources, &#34;PrimarySources must not be null&#34;);
+	this.primarySources = new LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));
+	this.webApplicationType = WebApplicationType.deduceFromClasspath();
+	this.bootstrapRegistryInitializers = new ArrayList&lt;&gt;(getSpringFactoriesInstances(BootstrapRegistryInitializer.class));
+	setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+	setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+	this.mainApplicationClass = deduceMainApplicationClass();
+}
+</code></pre>
+<p>重名的方法有两个，第一个只有primarySource一个参数，且它调用了第二个方法，并将第二个方法中第一个参数resouceLoader设置为<code>null</code>传递给第二个方法，因此我们只要关注第二个方法就可以知道初始化的大致流程。</p>
+<p>通过阅读以上代码，我们知道前述示例初始化<code>SpringApplication</code>对象实例有8个步骤：</p>
+<p>1.资源初始化。将资源加载器设置为<code>null</code>.</p>
+<pre><code language="language-java" class="language-java">this.resourceLoader = resourceLoader;
+</code></pre>
+<p>2.断言。如果主加载资源类为<code>null</code>，则会报错。</p>
+<pre><code language="language-java" class="language-java">Assert.notNull(primarySources, &#34;PrimarySources must not be null&#34;);
+</code></pre>
+<p>3.初始化主加载资源类集合并去重。将主加载资源类集合作为列表创建一个<code>LinkedHashSet</code>对象，保证集合无重复且有序（按照插入顺序）。</p>
+<pre><code language="language-java" class="language-java">this.primarySources = new LinkedHashSet&lt;&gt;(Arrays.asList(primarySources));
+</code></pre>
+<p>4.推断当前Web应用类型。具体Web应用有哪些类型，我们通过点击<code>webApplicationType</code>进入其源码可以查阅，分为NONE、SERVLET、REACTIVE三种类型。关于三种类型的判定方式，读者可以详细查看相关方法进行了解，为避免教程冗长，此处不进行展开叙述。其主要原理是根据类路径下是否有对应项目类型的类推断出不同的应用类型。</p>
+<pre><code language="language-java" class="language-java">this.webApplicationType = WebApplicationType.deduceFromClasspath();
+</code></pre>
+<p>5.设置引导程序注册的初始化器。</p>
+<pre><code language="language-java" class="language-java">this.bootstrapRegistryInitializers = new ArrayList&lt;&gt;(getSpringFactoriesInstances(BootstrapRegistryInitializer.class));
+</code></pre>
+<p>6.设置应用上下文初始化器</p>
+<pre><code language="language-java" class="language-java">setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+</code></pre>
+<p>通过查阅<code>ApplicationContextIntializer</code>源码，可以得知设置应用上下文初始化器分为五个步骤：</p>
+<ol type="1">
+<li>获取当前线程上下文类加载器</li>
+<li>获取<code>ApplicationContextInitializer</code>的实例名称集合并去重</li>
+<li>根据以上类路径创建初始化器实例列表</li>
+<li>初始化器实例列表排序</li>
+<li>返回实例对象</li>
+</ol>
+<p>7.设置监听器</p>
+<pre><code language="language-java" class="language-java">setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+</code></pre>
+<p>8.推断主入口类。通过构造一个运行时异常，再遍历异常栈中的方法名，获取方法名为 main 的栈帧，从来得到入口类的名字再返回该类。</p>
+<pre><code language="language-java" class="language-java">this.mainApplicationClass = deduceMainApplicationClass();
+</code></pre>
+<p>到此为止，Spring Boot初始化完毕。</p>
+<p><strong>如果您想要了解更多Spring Boot核心原理相关内容，可参阅以下文章：</strong></p>
+<ul>
+<li><a href="https://juejin.cn/post/6844903886990344200" target="_blank">深入理解SpringBoot核心原理（一）——–启动机制（starter机制）</a></li>
+<li><a href="https://juejin.cn/post/6844903893839642637" target="_blank">深入理解SpringBoot核心原理（二）——–初始化流程（run方法）</a></li>
+<li><a href="https://juejin.cn/post/6844903902186323981" target="_blank">深入理解SpringBoot核心原理（三）——– run()启动源码全过程分析</a></li>
+<li><a href="https://juejin.cn/post/6906637797080170510" target="_blank">Spring容器启动流程（源码解读）</a></li>
+<li><a href="https://juejin.cn/post/6844904099897409550" target="_blank">SpringBoot的启动流程是怎样的？SpringBoot源码（七）</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="关于Spring项目结构" duration="5">
+        <p>当您创建好一个Spring Boot项目之后，项目文件夹下会有很多文件，通过查看其文件夹结构，您可能认为这是一个典型的Maven或者Gradle项目结构，其中应用程序源代码位于<code>src/main/java</code>下，测试代码位于<code>src/test/java</code>下，非 Java 资源位于<code>src/main/resources</code>下 。此外还有各种杂项文件，下面简单介绍一下各种文件的用途：</p>
+<ul>
+<li><code>mvnw</code>和<code>mvnw.cmd</code>：这些是Maven包装器脚本，其中后缀名为<code>.cmd</code>的文件为Windows脚本，不带后缀名的为Linux脚本。即使您的计算机上没有安装 Maven，也可以使用这些脚本构建项目。</li>
+<li><code>pom.xml</code>这是Maven构建规范，里面包含了项目的信息和依赖项坐标。</li>
+<li><code>HelloApplication.java</code>：这是引导项目的主类。</li>
+<li><code>HelloApplicationTests.java</code>：这是一个简单的测试类，可确保成功加载Spring应用程序上下文。开发应用程序时，将添加更多的测试。</li>
+<li><code>static</code>： 此文件夹放置要提供给浏览器的任何静态内容（图像、样式表、JavaScript 等），默认为空。</li>
+<li><code>template</code>：此文件夹放置用于向浏览器呈现内容的模板文件，默认为空，如果您开发的前后端不分离的项目会用到。</li>
+<li><code>application.properties</code>：该文件默认为空，这是配置和更改各种属性的地方，比如更改数据库连接地址、更改端口号等。您可以尝试在其中写入<code>server.port=8081</code>更改服务运行的端口号。</li>
+<li><code>HELP.md</code>：包含一些帮助信息和链接。</li>
+<li><code>gitignore</code>：此文件用于在使用版本控制时忽略某些文件。</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="常见问题" duration="6">
+        <p><strong>Q：为什么我总是打不开教程中所提到的网站，或者无法下载项目依赖？</strong></p>
+<p>这可能是您的网络线路有些问题，请更换网络环境再次尝试。</p>
+<p><strong>Q：下载好的hello.zip文件应该解压到哪个位置？</strong></p>
+<p>随意。如果您实在无法决定应该解压到何处，请解压到不容易被删除的地方，如<code>D:\Documents\Spring Projects</code>.</p>
+<p><strong>Q：创建项目时，Group、Name等字段可以随意填写吗？</strong></p>
+<p>可以。但Group应遵循<code>com.域名</code>格式，如果您自定义这些信息，本教程中的一些代码可能不适用，请您自己更改。</p>
+<p><strong>Q：Spring和Spring Boot是什么关系？为什么教程里一会儿说Spring,一会儿又说Spring Boot?</strong></p>
+<p>Spring是一个庞大的后端开发生态，包含Spring Framework、Spring Boot、Spring Data等各种框架，如前所述，本文将Spring和Spring Boot视为一模一样，不做区分。</p>
+<p><strong>Q：我的程序出现了一些问题，可以从哪些地方得到帮助？</strong></p>
+<p>您可以通过阅读源码并调试您的程序以寻找问题的根源，您也可以从github或stackoverflow上面寻求帮助，另外您可以通过Google等搜索引擎搜索您想要的答案。</p>
+<p><strong>Q：我需要看懂Spring的源码吗？</strong></p>
+<p>如果您计划从事Spring开发工作，那么答案是肯定的，没有比源码更好的学习Spring的教程了。如果您只是日常使用，那么当您有问题无法解决时，可以尝试从源码中寻找解决思路。</p>
+<p>如果您仍有其它疑问，请查阅互联网或与我们取得联系。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="恭喜你！" duration="5">
+        <p>您已完成本教程的全部内容。Spring是很容易学习的，相比于原生的Java Web开发方式和繁杂的Spring xml配置，Spring Boot使您可以快速上手，灵活配置您的服务器，提高您的开发效率！本次教程，您已达成了以下成就：</p>
+<ul>
+<li>通过spring initializr网站创建一个Spring Boot项目</li>
+<li>通过IDEA或Ecplise开发Spring程序</li>
+<li>首次尝试阅读Spring Boot源码</li>
+<li>了解了Spring项目的结构和各种文件的作用</li>
+</ul>
+<h2 is-upgraded>接下来</h2>
+<p>之后的教程将向您介绍微观中国项目后端的项目结构和工作流程，并引导您为微观中国项目添加新的功能。如果您对微观中国项目感兴趣，请与我们<a href="https://github.com/chnsx" target="_blank">取得联系</a>，我们会为您介绍该项目。</p>
+<h2 is-upgraded>想要学习更多</h2>
+<p>您可以通过下列文章、网站学习更多Spring的相关知识</p>
+<p><strong>文章</strong></p>
+<ul>
+<li><a href="https://juejin.cn/post/6946474722393587720" target="_blank">前后端分离架构：Web 实现前后端分离，前后端解耦</a></li>
+<li><a href="https://juejin.cn/post/6844903823966732302" target="_blank">超详细！4小时开发一个SpringBoot+vue前后端分离博客项目！！</a></li>
+<li><a href="https://blog.csdn.net/weixin_34177064/article/details/93029720" target="_blank">Spring和SpringBoot比较，解惑区别</a></li>
+</ul>
+<p><strong>网站</strong></p>
+<ul>
+<li><a href="https://www.yuque.com/atguigu/springboot" target="_blank">尚硅谷——SpringBoot2核心技术与响应式编程</a>（语雀）</li>
+<li><a href="https://leonli0102.github.io/spring-in-action-v6/" target="_blank">Spring 实战 (第 6 版) MEAP</a>（gitbook）</li>
+<li><a href="https://mrbird.cc/" target="_blank">MrBird</a>（博客）</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
