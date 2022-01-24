@@ -35,7 +35,7 @@
 <h4>你拥有过怎样的Java Web开发经验？</h4>
 <paper-radio-group>
 <paper-radio-button>我完全没有听说过Java是什么</paper-radio-button>
-<paper-radio-button>我只开发过Java console控制台程序</paper-radio-button>
+<paper-radio-button>我只开发过Java控制台程序</paper-radio-button>
 <paper-radio-button>我只开发过原生Java Web程序</paper-radio-button>
 <paper-radio-button>我同时开发Spring程序和原生Java Web程序</paper-radio-button>
 <paper-radio-button>我使用Spring Boot开发Java Web程序</paper-radio-button>
@@ -60,7 +60,7 @@
     
       <google-codelab-step label="创建Spring Boot项目" duration="5">
         <h2 is-upgraded>您将搭建一个怎样的项目</h2>
-<p>该教程将帮助您搭建一个简单的Spring Boot程序，它将在您使用浏览器访问<a href="http://localhost:8080" target="_blank">localhost:8080/hello</a>网址时，向网页输出<code>Hello,Spring Boot!</code>字符串。</p>
+<p>该教程将帮助您搭建一个简单的Spring Boot程序，它将在您使用浏览器访问<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>网址时，向网页输出<code>Hello,Spring Boot!</code>字符串。</p>
 <p class="image-container"><img alt="image-访问hello路径" src="img\\d0bf9535c2f75494.png"></p>
 <h2 is-upgraded>创建hello项目</h2>
 <p>创建Spring Boot项目最简单的方式是通过浏览器访问<a href="http://start.spring.io" target="_blank">spring initializr</a>网站，这会创建一个全新的空白Spring Boot项目，您需要在Project单选组件中勾选<code>Maven Project</code>，在Language单选组件中勾选<code>Java</code>，在Spring Boot单选组件中勾选<code>2.6.2</code>，Project Metadata中所填的内容见下图，在Packaging单选组件中勾选<code>Jar</code>，在Java组件中勾选<code>8</code>。</p>
@@ -161,10 +161,10 @@ public class HelloApplication {
 <p class="image-container"><img alt="image-访问hello路径" src="img\\d0bf9535c2f75494.png"></p>
 <p><strong>现在根据您对当前代码的观察，尝试回答以下问题：</strong></p>
 <ul>
-<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出<code>Hello,world!</code>字符串。</li>
-<li>修改代码，使访问网址<a href="http://localhost:8080/greeting" target="_blank">localhost:8080/greeting</a>，使网页输出<code>Hello,Spring Boot!</code>字符串。</li>
-<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出的<code>Hello,world!</code>字符串为红色。</li>
-<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出当前时间戳。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，网页输出<code>Hello,world!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/greeting" target="_blank">localhost:8080/greeting</a>，网页输出<code>Hello,Spring Boot!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，网页输出的<code>Hello,world!</code>字符串为红色。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，网页输出当前时间戳。</li>
 <li>尝试将端口号8080更改为8081，使得仍然可以达到同样的效果。</li>
 <li>除了访问网址localhost，还可以访问哪些网址也能达到同样的效果？</li>
 </ul>
@@ -225,10 +225,10 @@ public class HelloApplication {
 <p class="image-container"><img alt="image-访问hello路径" src="img\\d0bf9535c2f75494.png"></p>
 <p><strong>现在根据您对当前代码的观察，尝试回答以下问题：</strong></p>
 <ul>
-<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出<code>Hello,world!</code>字符串。</li>
-<li>修改代码，使访问网址<a href="http://localhost:8080/greeting" target="_blank">localhost:8080/greeting</a>，使网页输出<code>Hello,Spring Boot!</code>字符串。</li>
-<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出的<code>Hello,world!</code>字符串为红色。</li>
-<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，使网页输出当前时间戳。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，网页输出<code>Hello,world!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/greeting" target="_blank">localhost:8080/greeting</a>，网页输出<code>Hello,Spring Boot!</code>字符串。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，网页输出的<code>Hello,world!</code>字符串为红色。</li>
+<li>修改代码，使访问网址<a href="http://localhost:8080/hello" target="_blank">localhost:8080/hello</a>，网页输出当前时间戳。</li>
 <li>尝试将端口号8080更改为8081，使得仍然可以达到同样的效果。</li>
 <li>除了访问网址localhost，还可以访问哪些网址也能达到同样的效果？</li>
 </ul>
@@ -440,7 +440,7 @@ public SpringApplication(ResourceLoader resourceLoader, Class&lt;?&gt;... primar
   <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
-  <script src="../../js/Inject.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
 
 </body>
 </html>
