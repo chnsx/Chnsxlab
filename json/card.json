@@ -45,7 +45,7 @@
             "btnStatus": false
         }
     ],
-    "git": [
+    "Git": [
         {
             "title": "01 版本控制简介",
             "author": "Chnsx",
@@ -105,7 +105,7 @@
             "time": 47,
             "iconUrl": "/image/springboot.svg",
             "btnStatus": true,
-            "url": "./course/0101/index.html"
+            "url": "./course/springboot01/index.html"
         },
         {
             "title": "02 创建Springboot项目",
@@ -113,14 +113,15 @@
             "time": 91,
             "iconUrl": "/image/springboot.svg",
             "btnStatus": true,
-            "url": "./course/0102/index.html"
+            "url": "./course/springboot02/index.html"
         },
         {
             "title": "03 微观中国服务端简介",
             "author": "Iceberry",
-            "time": 0,
+            "time": 74,
             "iconUrl": "/image/springboot.svg",
-            "btnStatus": false
+            "btnStatus": true,
+            "url":"./course/springboot03/index.html"
         },
         {
             "title": "04 扩展微观中国服务端功能",

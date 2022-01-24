@@ -1,0 +1,192 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>微观中国后端介绍</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <link rel="stylesheet" href="../../css/style.css">
+
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="03chns后端简介"
+                  title="微观中国后端介绍"
+                  environment="web"
+                  feedback-link="https://github.com/chnsx">
+    
+      <google-codelab-step label="先决条件" duration="1">
+        <ul>
+<li>掌握Git的相关概念和用法</li>
+<li>熟悉Maven构建工具的用法</li>
+<li>了解maven、tomcat工具的使用流程。</li>
+<li>了解xml、json文件格式和适用范围。</li>
+</ul>
+<p>这些先决条件包含了学习本节课程应具备的条件和知识，如果您不符合这些条目，请不必担心，您仍可按照本教程实现您的项目。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="需求分析" duration="5">
+        <p>微观中国在在前后端的基础任务是搭建数据可视化平台用于展示<a href="https://www.cpc.unc.edu/projects/china/data/datasets/index.html" target="_blank">chns</a>数据库的相关信息。在此基础上，将通过数据挖掘等手段整理出的个人画像和群体画像数据展示在平台上。</p>
+<p>根据微观中国项目申请书里所述，该平台的需求如下：</p>
+<ul>
+<li>数据处理功能 &#34;微观中国&#34;数据观测平台依据数据而运行，因此需要有较强的数据处理功能，包括数据存储，数据查询和数据管理。数据管理主要是针对管理员对数据的更新、上传、增减、备份等功能。</li>
+<li>可视化显示功能 通过合理设计，将 微观大型社会调查数据分类展示，形成可以按照指标、时间或区域分层次的可视化图形，并揭示一些数据之间不明显的关系，预测数据的未来走向等。</li>
+</ul>
+<p>总而言之，它是一个类似于<a href="https://www.elastic.co/cn/" target="_blank">Elasticsearch</a>等的数据搜索和展示平台。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="发展历史" duration="15">
+        <h2 is-upgraded>项目沿革</h2>
+<p>笔者于2020年下半年开始接手微观中国平台的建设工作，在这之前一直在学习Java相关知识。据我所知，微观中国是由大创项目<strong>经济地图</strong>演化而来，经济地图也是研究chns数据的，在结项后转变为现在的微观中国项目。在当年，参与此项目的小组成员和董老师就前后端的若干事宜进行了许多研讨，包括需求拟定、原型设计、技术选型、可行性分析等，后由于在一些方面迟迟不能做出肯定结论，因此将开发工作提前，有些问题在开发过程中逐渐明朗。</p>
+<p>后端部分起先是使用原生Java Web技术开发的<a href="https://github.com/Iceberry-qdd/chns" target="_blank">chns</a>，技术栈为Jsp+Servlet+Mysql，这是一个典型的适合于开发CMS的老牌前后端不分离技术栈。后由于在Web端开发过程中，需要通过JSON格式数据与<a href="https://echarts.apache.org/zh/index.html" target="_blank">Echarts</a>进行大量对接，并且JSON格式出现时间比较尴尬（在Jsp之后），在前后端交互的数据格式上面需要做大量的适配和统一工作，在查阅相关资料后Web端直接改用Ajax与后端进行交互，随着使用Ajax越来越多，前后端的黏着性越来越低，这也催生了前后端分离开发的想法。</p>
+<p>之后在自己的Java进阶之旅中，了解到Spring生态，借助它的规范性和便捷性，便逐步将项目移植到Spring中。其实借用Spring和Spring MVC完全可以接替旧技术，但由于xml配置文件越来越多，编写新的接口变得越来越繁琐，便开始将Spring Boot运用到项目中，于是就有了现在的<a href="https://github.com/chnsx/chnsx-backend" target="_blank">chnsx-backend</a>，该项目是自己在学习Spring Boot时所写。项目如有不足之处，您可以提出<a href="https://github.com/chnsx/chnsx-backend/issues" target="_blank">issues</a>，我将尽快回复您。</p>
+<p>关于<a href="https://github.com/chnsx" target="_blank">chnsx</a>，之所以创建这个组织，是有多方面考虑的。首先前后端分离后，前端与后端源码分别存储在我个人github账号的两个存储库中，考虑到之后项目的发展，还可能有文档仓库等其它存储库，需要一个集中存放的地方，而不是继续依附于我的个人账号。其次，微观中国项目是小组成员在学有余力的情况下进行开发的，人员流动频繁，创建一个组织账号后，组织的管理员可以更换，项目的代码库也可以得到留存，方便后续开发或参照之用。总之，它已无法继续存在于我的个人账号中，这不利于团队开发。</p>
+<p>其实，选择Spring作为后端开发框架也有我对就业的考虑。当前Java Web开发生态唯Spring一家独大，市场上对Spring的需求也是很多的，尽管这几年Java人才招聘市场呈现饱和的趋势，且有被Golang取代的趋势（后文会谈及Golang），但是核心理念大同小异，况且Spring Boot作为能够快速上手的Java Web开发框架，用作个人平时开发，接个私活也十分方便。包括前端我选择使用Vue框架进行开发，也是为了了解前端的组件化和模块化开发现状，适应人才市场需求。</p>
+<p>微观中国后端目前处于半成品状态，还有许多功能尚未实现，这其实也是急不得的，因为后端的建设也是要跟随需求进行变革的，就比如随着数据挖掘工作进一步展开，为了进行兼容或者对接，改用Python也不是不可能；或者随着Golang的发展，为了部署方便和cloud native而改用Golang呢？</p>
+<h2 is-upgraded>技术选型</h2>
+<p>微观中国后端目前采用的技术栈如下：</p>
+<ul>
+<li>开发语言： Java</li>
+<li>IDE：IDEA</li>
+<li>全站框架：Spring Boot</li>
+<li>Model层框架： MyBatis</li>
+<li>数据库：Mysql或Sqlite</li>
+</ul>
+<h2 is-upgraded>发展前景展望</h2>
+<p>微观中国后端可以在数据库的增、删、改，鉴权、监控、缓存、前后端统一部署、安全，单体应用等方面进行扩展。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="系统架构阐述" duration="20">
+        <p class="image-container"><img alt="chnsx架构图" src="img\\6e915e9f6e51ffc9.png"></p>
+<p>上述架构图中描绘了微观中国服务端各种组件之间的信息传递（箭头表示数据流动的方向），还简单描述了服务端与数据库和Web交互的过程，整个项目主要采用MVC设计模式，将其拆分为Model模型、View视图、Controller控制器。服务端采用三层架构，将整个服务拆分为Dao层、Service层、Controller层，每一模块都各司其职，共同组成整个项目。</p>
+<h2 is-upgraded>MVC设计模式</h2>
+<ul>
+<li>Model模型：用于承载数据，并对用户提交请求进行计算的模块。其分为两类，一类称为数据承载Bean，一类称为业务处理Bean。所谓数据承载Bean是指实体类，专门承载业务数据的，如Student、User等。而业务处理Bean则是指Service或Dao对象，专门用于处理用户提交请求的。</li>
+<li>View视图：为用户提供使用界面，与用户直接进行交互，比如软件界面、网页等用户可以直接看到的画面。</li>
+<li>Controller控制器：用于将用户请求转发给相应的Model进行处理，并处理Model的计算结果向用户提供相应响应。</li>
+</ul>
+<p>MVC架构程序的工作流程如下：</p>
+<ol type="1">
+<li>用户通过View页面向服务端提出请求，可以是表单请求、超链接请求、AJAX请求等。</li>
+<li>服务端Controller控制器接收到请求后对请求进行解析，找到相应 的Model对用户请求进行处理。</li>
+<li>Model处理后，将处理结果再交给Controller。</li>
+<li>Controller在接到处理结果后，根据处理结果找到要作为向客户端发回的响应View页面，页面经渲染（数据填充）后，再发送给客户端。</li>
+</ol>
+<h2 is-upgraded>三层架构</h2>
+<p>三层架构是软件编码时为了具有更好的逻辑性，降低程序的耦合度所使用的架构模式，在使用三层架构进行程序设计时，一般采用面向抽象编程。即上层对下层的调用，是通过接口实现的。而下层对上层的真正服务提供者，是下层接口的实现类。服务标准（接口）是相同的，服务提供者（实现类）可以更换。这就实现了层间的耦合。每一层的职能如下：</p>
+<ul>
+<li>View层：用于编写接收用户提交请求的代码。</li>
+<li>Service层：用于编写系统的业务逻辑代码。</li>
+<li>Dao层：用与编写直接操作数据库的代码。</li>
+</ul>
+<h2 is-upgraded>SSM框架</h2>
+<p>SSM框架是指SpringMVC、Spring、Mybatis三个框架。在整个Spring生态中，SpringMVC时View层的实现者，承担用户的请求接收功能。SpringMVC的Controller作为整个应用的控制器，完成用户请求的转发及对用户的响应。Spring以整个应用大管家的身份出现。整个应用中所有的Bean的生命周期行为，均由Spring来管理。即整个应用中所有对象的创建、初始化、销毁，及对象间关联关系的维护，均由Spring进行管理。MyBatis则作为Dao层的实现者，完成对数据库的增删查改各项功能。</p>
+<h2 is-upgraded>其它模块功能简介</h2>
+<ul>
+<li><strong>Config</strong>：用于统一存放整个服务端配置的包，它包括数据库连接配置、Mybatis配置、日志配置等各种配置项，可以类比各类软件中的设置选项。</li>
+<li><strong>Aspect</strong>：用于编写面向切面编程的代码，在本项目中主要实现全局日志、全局异常捕获和统一定制接口返回格式三种功能。</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="部署项目" duration="25">
+        <p>要尝试运行和部署微观中国后端项目，应首先从Github代码库中克隆一份代码，然后修改配置文件为您的本地环境配置，再准备一个名为chns的数据库，使用maven打包运行即可。</p>
+<h2 is-upgraded>获取代码</h2>
+<p>如果您熟悉使用Git工具，我们推荐您使用Git克隆本仓库，在Bash中输入以下指令以得到chnsx-backend仓库的副本。</p>
+<pre><code language="language-bash" class="language-bash">git clone git@github.com:chnsx/chnsx-backend.git
+</code></pre>
+<p>您也可以直接点击下面按钮下载本仓库的main分支：</p>
+<p><a href="https://github.com/chnsx/chnsx-backend/archive/refs/heads/main.zip" target="_blank"><paper-button class="colored" raised>下载chnsx-backend-main</paper-button></a></p>
+<p>另外，您还可以点击下面按钮下载本项目的二进制版本：</p>
+<p><a href="https://github.com/chnsx/chnsx-backend/releases/download/v0.0.5-SNAPSHOT/chnsx-0.0.5-SNAPSHOT.jar" target="_blank"><paper-button class="colored" raised>下载chnsx-0.0.5-SNAPSHOT.jar</paper-button></a></p>
+<p>在下载到的二进制文件相同路径下打开Bash，输入以下命令即可启动服务端：</p>
+<pre><code language="language-bash" class="language-bash">java -jar chns-0.0.5-SNAPSHOT.jar
+</code></pre>
+<p>待服务器启动后，您可以使用浏览器打开<a href="http://localhost:8080/api" target="_blank">localhost:8080/api</a>访问Api文档页面，您也可以通过Postman或者curl对这些接口进行访问或测试。</p>
+<p>如果您仅想要在线阅读本项目的源码，请转到<a href="https://github.com/chnsx/chnsx-backend" target="_blank">chnsx-backend</a>，它有适当的注释以帮助您理解代码.</p>
+<h2 is-upgraded>构建并运行</h2>
+<p>如果您想要在本地构建并运行，请通过上述方式获取代码的副本到本地，通过支持Spring Boot的IDE打开，使用maven构建后运行即可。如果您使用IDEA作为IDE，直接点击右上角▶按钮，待依赖项下载完毕后，即可开始构建并运行。</p>
+<h2 is-upgraded>更改配置</h2>
+<p>在项目的<code>src/main/resources</code>目录下，有三个配置文件<code>application.yml</code>，<code>application-mysql.yml</code>、<code>application-sqlite.yml</code>，它们的作用分别如下：</p>
+<ul>
+<li><code>application.yml</code>：Spring Boot的主配置文件，目前该配置文件仅包含<code>启用的子配置文件</code>、日志相关和视图绑定相关配置项。</li>
+<li><code>application-sqlite.yml</code>：这是子配置文件，当您需要连接Sqlite数据库时，请启用它，这会使程序加载<code>src/main/resources/chns.db</code>数据库文件作为数据库源（默认已启用）。此外还包含Servlert根路径、错误处理相关配置、数据源配置、Druid配置、Mybatis配置项。</li>
+<li><code>application-mysql.yml</code>：这是子配置文件，当您需要连接Mysql数据库时，请启用它，这会使程序使用您的计算机上的Mysql数据库作为数据库源。此外还包含Servlert根路径、错误处理相关配置、数据源配置、Druid配置、Mybatis配置项。</li>
+</ul>
+<h3 is-upgraded><strong>修改数据库源</strong></h3>
+<p>程序默认使用<code>src/main/resources/chns.db</code>作为数据库源，里面包含了该程序所需要的所有数据集，若您需要使用Mysql作为数据源，您需要执行以下几个步骤：</p>
+<ol type="1">
+<li>创建一个名为chns的数据库，导入chns数据集。如果您不知道chns数据集是什么，那么请将<code>src/main/resources/chns.db</code>数据库中的数据集导出为<code>chns.csv</code>文件后，再将<code>chns.csv</code>文件导入您的数据库中。</li>
+<li>将<code>application.yml</code>文件第6行<code>active: sqlite</code>更改为<code>active: mysql</code>;</li>
+<li>将<code>application-mysql.yml</code>文件第13、14行的数据库用户名和密码更改为您自己的内容。</li>
+<li>如果您的数据库配置无误，那么现在您可以点击IEDA右上角▶成功运行本项目。</li>
+</ol>
+<aside class="special"><p>如果您需要修改其它配置项，请参阅<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html#application-properties" target="_blank">配置指南</a></p>
+</aside>
+<h2 is-upgraded>打包为二进制文件（.jar）</h2>
+<p>使用maven工具的package插件即可将其打包为二进制文件，打包后的文件位于<code>build/</code>文件夹中。</p>
+<p class="image-container"><img alt="maven打包为jar文件" src="img\\7cbdcc4bbf751fcb.png"></p>
+<h2 is-upgraded>部署</h2>
+<p>使用maven打包后的jar文件包含用运行所需的所有东西，包括tomcat。如果您需要将其部署至您的服务器中，在确保您的服务器具有jre（Java Runtinme Environment，Javay运行时环境）的情况下，只需将打包完成后的jar文件上传至您的服务器，并指定端口运行即可。如果您的服务器具有Docker或Kubernetes，请将jar文件放入这些容器中，像您部署其它程序一样运行它即可。有些云服务商自带容器，有些则没有，这取决于您自己。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="常见问题" duration="5">
+        <p><strong>Q：我非常愿意且有能力接手微观中国服务端的开发工作，但我的技术栈不是Java，请问我可以转变技术栈进行开发吗?</strong></p>
+<p>您可以与小组成员共同商议，权衡利弊，如果利大于弊，那么完全可以。</p>
+<p><strong>Q：为什么不使用Python或者Php作为后端开发语言，而是选择Java?</strong></p>
+<p>一方面Java非常适合于服务端开发，它具有跨平台、社区活跃、性能好的优点；其次这也是从笔者开始参与大创以来一直在学习的一门语言。</p>
+<p><strong>Q：为什么我打开github项目链接，却显示404？</strong></p>
+<p>这可能时您没有加入我们的组织。我们的存储库并不是公开仓库，您需要加入我们的组织才能浏览和克隆我们的仓库。至于将存储库设置为私有，是因为项目仍然没有完成，且该项目是需要申请软件著作权的，并不是随便开源的。如果您加入了chnsx，仍然无法访问这些存储库，去这可能是由于您的网络环境导致，请尝试更换网络线路。</p>
+<p><strong>Q：这几年Golang崛起，Java市场过于饱和，我还有必要学习Java吗？</strong></p>
+<p>这取决于您的就业方向。如果您选择云服务、区块链、以太坊这些就业方向，那您应该选择学习Golang，它具有静态编译、跨平台、高并发的特点，被称为现代的C++语言。学习Java Web会了解诸如Servlet、filter等基础概念，而Golang将这些全部封装起来，只需几行代码就可启动一个Web服务，不利于认识服务器的原理。您可以搭配<strong>计算机网络</strong>进行学习。</p>
+<p><strong>Q：当我运行该项目时，总是运行失败？</strong></p>
+<p>您应该查看控制台显示的错误堆栈信息，尝试找出错误的原因，如果不能确定缘由，您可以通过搜索引擎查找答案。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="下一步" duration="3">
+        <p>🎊恭喜你已经完成本课程的全部内容！在本节课中，您已经学到：</p>
+<ol type="1">
+<li>微观中国服务端的发展历程；</li>
+<li>MVC和三层架构；</li>
+<li>微观中国服务端的项目结构；</li>
+<li>从代码存储库Github获取源代码并运行我们的程序。</li>
+</ol>
+<p>接下来，我们会向您讲解微观中国服务端各接口的编码，并尝试增加和扩展服务端的功能。</p>
+<h2 is-upgraded>想要学习更多</h2>
+<ul>
+<li><a href="https://juejin.cn/post/6844903479568252935" target="_blank">MVC 与三层架构</a></li>
+<li><a href="https://juejin.cn/post/6899609179523121165" target="_blank">MySQL 知识脑图 - 数据库原理</a></li>
+<li><a href="https://juejin.cn/post/6894043724850921485" target="_blank">SpringBoot 知识脑图 - 全栈开源框架</a></li>
+<li><a href="https://juejin.cn/post/6892770902019473422" target="_blank">MyBatis 知识脑图 - ORM持久层框架</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="../../js/Inject.js"></script>
+
+</body>
+</html>
