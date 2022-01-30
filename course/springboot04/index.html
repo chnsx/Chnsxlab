@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
   <link rel="stylesheet" href="../../css/style.css">
-  
+
 </head>
 <body>
   <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
@@ -449,7 +449,7 @@ SELECT round(sum(CASE  WHEN `患病率优化ing`.`M24B_1` = &#39;1&#39; THEN `�
 <pre><code language="language-sql" class="language-sql">SELECT 信息 FROM hlth_12 WHERE 条件=值 LIMIT 1000;
 </code></pre>
 <p>例子（部分）：</p>
-<pre><code language="language-sql" class="language-sql">SELECT Idind , wave AS `年份` , M26B AS `医疗帮助` FROM hlth_12 WHERE 
+<pre><code language="language-sql" class="language-sql">SELECT Idind , wave AS `年份` , M26B AS `医疗帮助` FROM hlth_12 WHERE M26B=1 LIMIT 1000;
 </code></pre>
 <p>关于此Sql语句的完整版本，可参见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/resources/mybatis/mapper/sqlite/SearchMapper.xml" target="_blank">此处</a>。</p>
 
