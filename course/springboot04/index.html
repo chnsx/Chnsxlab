@@ -1,0 +1,484 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>微观中国后端工作流程（上）</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="05微观中国后端工作流程"
+                  title="微观中国后端工作流程（上）"
+                  environment="web"
+                  feedback-link="https://github.com/chnsx">
+    
+      <google-codelab-step label="先决条件" duration="3">
+        <ul>
+<li>掌握Spring、SpringMVC、SpringBoot核心知识</li>
+<li>掌握Mybatis基本用法</li>
+<li>掌握面向切面编程相关知识</li>
+<li>掌握使用Junit进行单元测试</li>
+<li>掌握数据库查询相关操作</li>
+<li>熟悉使用http模拟和调试软件使用（如Postman、curl等）</li>
+<li>熟悉计算机网络知识</li>
+<li>了解xml语法</li>
+<li>了解yml语法</li>
+<li>了解Json格式和Restful风格Api</li>
+</ul>
+<p>这些先决条件包含了学习本节课程应具备的条件和知识，如果您不符合这些条目，请不必担心，您仍可按照本教程实现您的项目。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="接口和需求定义" duration="8">
+        <h2 is-upgraded>需求定义</h2>
+<p>本着前进一小步即是前进一大步的精神，后端的需求暂且放在查询chns数据库中医疗健康表（hlth12.csv）、资产表表（asset_12.csv）、保险表（ins_12.csv）的个人数据和整体数据上。具体需求如下所示：</p>
+<ol type="1">
+<li>查询某人(IDind)在某年(wave)的所有信息(M24B_*)</li>
+<li>查询所有疾病(M24B_*)在某年(wave)的患病率</li>
+<li>查询某人(IDind)在某年(wave)进行过的身体检查项目(M48)</li>
+<li>查询所有身体检查项(M48)在某年(wave)的身体检查率</li>
+<li>查询某人(IDind)在某年(wave)的各种医疗费用</li>
+<li>查询某人(IDind)在某年(wave)寻求医疗帮助的地点</li>
+<li>查询个人(IDind)在某年(wave)拥有的医疗保险类型</li>
+<li>查询某年(wave)人群拥有各类保险(M3A_*)占比</li>
+<li>查询某年(wave)所有厕所设施类型的占比</li>
+<li>查询某年(wave)所有家庭车辆类型的占比</li>
+<li>查询某年(wave)所有家庭家电类型的占比</li>
+<li>查询某年(wave)所有家庭使用照明类型的占比</li>
+<li>查询某年(wave)所有家庭农机类型占比</li>
+<li>查询某年(wave)所有家庭获得自来水渠道的占比</li>
+<li>查询某年(wave)所有家庭饮用前是否过滤水两者的占比</li>
+<li>查询某年(wave)所有家庭是否为饮用水支付费用占比</li>
+<li>查询某年(wave)所有家庭烹饪燃料类型占比</li>
+<li>查询某年(wave)所有家庭住房来源类型占比</li>
+<li>全局搜索（任意组合以下字段给出查询结果：年份、医疗帮助、医生诊断、发烧，喉咙痛，咳嗽、腹泻，胃痛、胃痛、哮喘、头痛，头晕、关节，肌肉疼痛、皮疹，皮炎、耳眼病、心脏病/胸痛、其他传染病、非传染性疾病、卡介苗、麻疹、百白破、脊髓灰质炎、流感脑炎、脑炎、甲型肝炎、乙型肝炎、其他、治疗费用、第二个地点的治疗费用、额外的花销在医疗上、花在疾病或受伤上的钱、过去12个月免疫接种的花销、预防性服务的费用）</li>
+</ol>
+<p>这些需求主要是围绕前述三张表进行查询操作，因此首先的任务是分析这三张表中的数据，将各种字母代号语义化，参考的翻译标准为<code>chns2015-csv.rar</code>数据中<code>/1-codebook</code>文件夹下对应的同名pdf文件；之后编写相关Sql语句进行查询操作确保Sql语句可以完成上述需求的内容；最后通过Mybatis框架编写相应的Sql映射文件和mapper层代码。</p>
+<h2 is-upgraded>接口定义</h2>
+<p>与此同时，由于需求已经十分明确，可以优先商议接口规范，确定接口的格式，以便前后端同时进行开发。根据上述需求，协商出的接口对应如下：</p>
+<ol type="1">
+<li>/medical/personal/{id}/disease?year={year}</li>
+<li>/medical/statistics/disease?year={year}</li>
+<li>/medical/personal/{id}/bodyExam?year={year}</li>
+<li>/medical/statistics/bodyExam?year={year}</li>
+<li>/medical/personal/{id}/money?year={year}</li>
+<li>/medical/personal/{id}/helper?year={year}</li>
+<li>/medical/personal/{id}/insurance?year={year}</li>
+<li>/medical/statistics/insurance?year={year}</li>
+<li>/asset/statistics?year={year}</li>
+<li>/search?{condition}={value}&amp;{condition}={value}...</li>
+</ol>
+<aside class="special"><p>根据与上届学长讨论，需求9-18可以属于同一类需求，因此合并为一个接口9，此后一类需求均合并在一个接口上。</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="兵分两队，并行开发" duration="3">
+        <p>接口定义好后，后端就可以着手开发了。后端可以分为A队和B队同时进行，两队的工作路线如下所示：</p>
+<ul>
+<li>A队：<code>编写配置文件->编写控制器->编写日志功能->与B队合作开发后续功能</code></li>
+<li>B队：<code>处理数据库->编写Sql语句->编写mapper层->编写Sql映射文件->与A队合作开发后续功能</code></li>
+<li>两队合作部分：<code>编写业务逻辑->编写工具类->编写单元测试->编写全局切面类->进行测试->修改代码->进行测试->修改代码->...->打包发布->日常维护</code>。</li>
+</ul>
+<p>其中单元测试部分也可以放在两队开始工作前、接口编写完成后的时间节点编写，预先设定好若干测试样例，以便后期开发完毕进行单元测试来验证是否符合预期结果。</p>
+<p>团队进行开发时，可以选用Git工具进行源代码管理。及时将您的代码上传至Git存储库中，方便查看各阶段工作情况和进行版本控制。两队各自维护自己的分支代码，然后进行代码审核，最后将其并入主分支。</p>
+<aside class="special"><p>有关Git相关理论和使用方法，您可以参阅以下资料：</p>
+</aside>
+<ul>
+<li><a href="https://git-scm.com/docs" target="_blank">Git官方文档</a>（英文）</li>
+<li><a href="https://git-scm.com/book/zh/v2" target="_blank">Pro Git</a> （在线电子书）</li>
+<li><a href="https://git-scm.com/docs/gittutorial" target="_blank">Git入门之旅</a></li>
+<li><a href="https://juejin.cn/book/6844733697996881928" target="_blank">Git 原理详解及实用指南</a>（掘金小册）</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="[A队]从项目依赖说起" duration="10">
+        <p>在您下载到的后端项目中打开<code>pom.xml</code>文件，这里面包含着项目使用的所有依赖项。文件内容解释如下：</p>
+<p>1.pom模型版本</p>
+<pre><code language="language-xml" class="language-xml">&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+</code></pre>
+<p>2.项目信息</p>
+<pre><code language="language-xml" class="language-xml">&lt;groupId&gt;com.iceberry&lt;/groupId&gt;&lt;!--项目唯一标识--&gt;
+&lt;artifactId&gt;chnsx&lt;/artifactId&gt;&lt;!--项目名称--&gt;
+&lt;version&gt;0.0.5-SNAPSHOT&lt;/version&gt;&lt;!--版本号--&gt;
+&lt;name&gt;chnsx&lt;/name&gt;&lt;!--项目名称，供Maven生成文档用--&gt;
+&lt;description&gt;A visualization project based on the CHNS database, designed to analyze the population of China.
+&lt;/description&gt;&lt;!--项目描述--&gt;
+</code></pre>
+<p>3.父级项目</p>
+<pre><code language="language-xml" class="language-xml">&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;2.3.5.RELEASE&lt;/version&gt;&lt;!--项目使用的SpringBoot版本--&gt;
+    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+&lt;/parent&gt;
+</code></pre>
+<p>4.属性设置</p>
+<pre><code language="language-xml" class="language-xml">&lt;properties&gt;
+    &lt;java.version&gt;1.8&lt;/java.version&gt;&lt;!--编译时使用的Jdk版本--&gt;
+&lt;/properties&gt;
+</code></pre>
+<p>5.Sqlite数据库驱动依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.xerial&lt;/groupId&gt;
+    &lt;artifactId&gt;sqlite-jdbc&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>6.日志依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+    &lt;version&gt;1.2.12&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>7.Druid数据库连接池依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;druid&lt;/artifactId&gt;
+    &lt;version&gt;1.2.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>8.jdbc数据库驱动依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>9.SpringMvc依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>10.Mybatis数据库持久层依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;2.1.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>11.面向切面编程依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>12.支持传统xml配置依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>13.Mysql数据库驱动依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>14.测试相关依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;&lt;!--排除内置的测试工具--&gt;
+            &lt;groupId&gt;org.junit.vintage&lt;/groupId&gt;
+            &lt;artifactId&gt;junit-vintage-engine&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>15.Junit测试依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>16.maven插件依赖项坐标</p>
+<pre><code language="language-xml" class="language-xml">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+<p>这些依赖项是开发和运行时必须使用的，如果您要为项目添加新功能，您可以自由添加或删改这些依赖项。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="[B队]数据库字段语义化" duration="12">
+        <p>chns数据集是以csv格式给出的，表头部分是缩写，有些内容是以数字代表的，需要将其与实际含义对应。对应文件在<code>/1-codebook</code>文件夹下，但是对应的实际含义以英文表述，有两种解决办法，一种是直接修改数据库表头后再进行使用，另一种是不更改数据库内容，通过程序进行对应。因为数据库的内容会是动态变化的，可能会有新的数据，通过人工修改数据库表头的做法不可取，于是采用第二种方法。</p>
+<p>采用人工手段将这些字段的代号与实际含义对应起来，并翻译为中文，形成一个<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/resources/config/zh.yml" target="_blank">zh.yml</a>文件供程序读取。部分内容如下：</p>
+<pre><code language="language-yml" class="language-yml">en_zh:
+  hlth12: # 表名
+    M24B_1: 发烧-喉咙痛-咳嗽 # 中英文对照
+    M24B_2: 腹泻-胃痛
+    M24B_2A: 胃痛
+    M24B_2B: 哮喘
+    M24B_3: 头痛-头晕
+    M24B_4: 关节-肌肉疼痛
+    M24B_5: 皮疹-皮炎
+    ......
+</code></pre>
+<p>现在程序可以通过这个文件自动将代号与中文翻译对应起来返回给前端，具体步骤如下：</p>
+<p>1.将此文件放在项目的<code>src/main/resources/config/</code>目录下；</p>
+<p>2.在<code>src/main/java/com/iceberry/config/</code>目录下创建<code>EnToZhConfig.java</code>文件，用于转换字母代号和中文，部分代码解释如下：</p>
+<p>👉 为SpringBoot声明自定义配置类</p>
+<pre><code language="language-java" class="language-java">// 定义配置文件路径、编码方式和处理器
+@PropertySource(value = {&#34;classpath:config/zh.yml&#34;}, encoding = &#34;utf-8&#34;, factory = YamFactory.class)
+
+// 声明这是一个配置类
+@Configuration
+
+// 声明配置前缀
+@ConfigurationProperties(prefix = &#34;en-zh&#34;)
+</code></pre>
+<p>👉 三个私有Map变量分别保存三个表中的映射关系</p>
+<pre><code language="language-java" class="language-java">private Map&lt;String, String&gt; hlth12;
+private Map&lt;String, String&gt; ins12;
+private Map&lt;String, String&gt; asset12;
+</code></pre>
+<p>👉 创建Yaml处理器，告知SpringBoot应如何处理Yaml文件（无需过多探讨该段代码内部细节，此代码为SpringBoot文档中提供）</p>
+<pre><code language="language-java" class="language-java">// Yaml文件处理器
+class YamlFactory extends DefaultPropertySourceFactory {
+    @Override
+    public org.springframework.core.env.PropertySource&lt;?&gt; createPropertySource(String name, EncodedResource resource)
+            throws IOException {...}
+    }
+
+    private Properties loadYaml(EncodedResource resource) throws IOException {...}
+}
+</code></pre>
+<p>3.在<code>src/main/java/com/iceberry/utils/</code>目录下创建工具类<code>MapUtils.java</code>，用于调用Yaml处理器读取后的三个Map变量进行中英文转换,部分代码解释如下：</p>
+<p>👉 自动注入中英文转换配置类</p>
+<pre><code language="language-java" class="language-java">@Autowired
+public void setEnToZhConfig(EnToZhConfig enToZhConfig) {
+    MapUtils.enToZhConfig = enToZhConfig;
+}
+
+// 枚举数据库表类型
+public enum TableType {DISEASE, INSURANCE, ASSET}
+</code></pre>
+<p>👉 将从数据库中查出的数据转换为中文</p>
+<pre><code language="language-java" class="language-java">public static Map&lt;String, Object&gt; replaceAllKey(Map&lt;String, Object&gt; map, TableType tableType) {
+
+    // 抛出错误供全局异常处理器处理
+    if (map.size() == 0 | enToZhConfig == null) throw new ConvertNameException(&#34;转换中英文失败！&#34;);
+    Map&lt;String, String&gt; zhMap = new HashMap&lt;&gt;();
+
+    // 将数据的key提取为一个数组
+    Object[] keyArray = map.keySet().toArray();
+
+    // 根据表类型选择获取相应中英文对照Map
+    switch (tableType) {
+        case DISEASE:
+            zhMap = enToZhConfig.getHlth12();
+            break;
+        case INSURANCE:
+            zhMap = enToZhConfig.getIns12();
+            break;
+        case ASSET:
+            zhMap = enToZhConfig.getAsset12();
+    }
+
+    // 逐个遍历key，使用中文替换掉代号
+    for (Object key : keyArray) {
+        Object value = map.remove(key);
+
+        // 重新组合数据的Key和Value
+        map.put(String.valueOf(zhMap.get(key)), value);
+    }
+    return map;
+}
+</code></pre>
+<aside class="warning"><p><code>MapUtils.java</code>文件中带@Deprecated注解的方法表示该方法已弃用，开发中尽量使用不带此注解的方法和类</p>
+</aside>
+<p>到此，字段语义化的功能已经实现。这是一种方法，如果有更好的办法，可以替换掉此办法。另外通过编写程序自动修改数据库表头和内容也可以。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="[A队]编写配置文件" duration="10">
+        <p>A队负责搭建项目结构和编写配置文件，这些配置文件包含数据库配置、web环境配置、日志配置等。</p>
+<h2 is-upgraded>数据库配置</h2>
+<p>项目采用多数据源配置，支持Mysql数据库和Sqlite数据库，对于这两种数据库，它们有各自的配置文件<code>application-mysql.yml</code>和<code>application-sqlite.yml</code>.以Mysql为例，数据库配置如下：</p>
+<pre><code language="language-yml" class="language-yml">datasource:
+    # 数据库驱动名称
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # 数据库连接路径
+    url: jdbc:mysql:///chns?serverTimezone=UTC
+
+    # 连接数据库登录账号名称
+    username: root
+
+    # 连接数据库登录密码
+    password: root
+    initialization-mode: always
+</code></pre>
+<p>配置文件第16-33行为Druid数据库连接池配置，此处摘抄自官方示例，有关配置的具体含义和作用，您可以参阅<a href="https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE#1-%E9%80%9A%E7%94%A8%E9%85%8D%E7%BD%AE" target="_blank">Druid wiki</a>.</p>
+<h2 is-upgraded>持久层配置</h2>
+<p>项目使用了Mybatis持久层框架，相关配置项如下：</p>
+<pre><code language="language-yml" class="language-yml">mybatis:
+  configuration:
+    # 配置延迟加载
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+
+    # 配置数据库缓存
+    cache-enabled: true
+
+  # 配置映射类所在的包名
+  mapper-locations: classpath:mybatis/mapper/mysql/*.xml
+</code></pre>
+<h2 is-upgraded>日志配置</h2>
+<p>在项目的<code>src/main/resources/</code>文件夹下有文件<code>log4j.properties</code>用于配置日志，相关内容如下：</p>
+<pre><code language="language-properties" class="language-properties"># 日志级别和输出位置
+log4j.rootCategory=error, CONSOLE
+log4j.logger.org.apache.axis.enterprise=FATAL, CONSOLE
+
+# 设置控制台输出日志格式
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} %-6r [%15.15t] %-5p %30.30c %x - %m\n
+</code></pre>
+<p>另外，在<code>application.yml</code>文件中也有日志相关配置：</p>
+<pre><code language="language-yml" class="language-yml">spring:
+  output:
+    ansi:
+
+      # 是否启用ansi输出
+      enabled: always
+</code></pre>
+<pre><code language="language-yml" class="language-yml">logging:
+  pattern:
+    # 控制台输出日志格式
+    console: &#39;${CONSOLE_LOG_PATTERN:%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss}}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}}&#39;
+
+</code></pre>
+<h2 is-upgraded>Web配置</h2>
+<p>在项目的<code>src/main/resources/</code>文件夹下有三个配置文件，它们都包含了Web配置，相关内容如下：</p>
+<pre><code language="language-yml" class="language-yml"># application-*.yml
+server:
+  servlet:
+    ### 项目url根路径
+    context-path: /chnsx
+  error:
+    ### 是否输出信息和错误
+    include-message: always
+    include-exception: true
+</code></pre>
+<pre><code language="language-yml" class="language-yml"># application.yml
+spring:
+  mvc:
+    view:
+
+      # 视图文件后缀名
+      suffix: .html
+      # 视图前缀
+      prefix: /
+</code></pre>
+<h2 is-upgraded>跨域配置</h2>
+<p>跨域配置用于解决前后端分离环境中由于域名不同导致访问被禁止的情况，有多种解决方案，项目中注册了一个全局跨域配置组件用于解决跨域问题：</p>
+<pre><code language="language-java" class="language-java">//src/main/java/com/iceberry/config/CorsConfig.java
+
+//注册全局跨域配置类
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping(&#34;/**&#34;)// 允许访问的路径，/**表示允许全部
+                .allowedOrigins(&#34;*&#34;)// 允许哪些域访问
+                .allowCredentials(true)
+                .allowedMethods(&#34;GET&#34;, &#34;POST&#34;, &#34;DELETE&#34;, &#34;PUT&#34;)// 允许跨域的http请求方法
+                .maxAge(3600);
+    }
+}
+</code></pre>
+<p>另外还有一些配置文件，他们是随着项目迁移遗留下来的，并没有起到什么作用，可以忽略它们。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="[B队]编写sql语句" duration="10">
+        <p>根据需求编写相关Sql语句即可，以一个个人需求，一个总体需求和全局搜索需求为例。</p>
+<h2 is-upgraded>个人需求：以查询某人(IDind)在某年(wave)的所有(M24B_*)信息为例</h2>
+<p>伪Sql语句如下：</p>
+<pre><code language="language-sql" class="language-sql">SELECT 信息 FROM hlth_12 where IDind=个人Id AND wave=年份;
+</code></pre>
+<p>例子：</p>
+<pre><code language="language-sql" class="language-sql">SELECT * FROM hlth_12 WHERE IDind=111101002001 AND wave=2015;
+</code></pre>
+<p>所有在数据库中查询个人信息的Sql语句均按此格式编写即可。</p>
+<h2 is-upgraded>整体需求：以查询所有疾病(M24B_*)在某年(wave)的患病率为例：</h2>
+<p>伪Sql语句</p>
+<pre><code language="language-sql" class="language-sql">SELECT COUNT(M24B_*的值为1) / COUNT(M24B_*) AS M24B_* FROM hlth_12 WHERE wave=年份;
+</code></pre>
+<p>例子（语句太长，此处只展示部分）：</p>
+<pre><code language="language-sql" class="language-sql">Version 1.0
+SELECT ROUND(( SELECT COUNT(M24B_1) FROM hlth_12 WHERE M24B_1 = 1 AND wave = 2015 ) * 1.0 / COUNT(IFNULL(M24B_1, 0)) * 100, 2) AS M24B_1 FROM hlth_12 WHERE wave = 2015;
+</code></pre>
+<pre><code language="language-sql" class="language-sql">Version 2.0
+SELECT round(sum(CASE  WHEN `患病率优化ing`.`M24B_1` = &#39;1&#39; THEN `患病率优化ing`.`人数` ELSE 0 END) / sum(CASE  WHEN `患病率优化ing`.`M24B_1` = &#39;1&#39; OR `患病率优化ing`.`M24B_1` = &#39;0&#39; OR `患病率优化ing`.`M24B_1` = &#39;9&#39; OR `患病率优化ing`.`M24B_1` IS NULL THEN `患病率优化ing`.`人数` ELSE 0 END) * 100, 2) AS `M24B_1` FROM ( SELECT `hlth_12`.`M24B_1` AS `M24B_1`, count(1) AS `人数` FROM `hlth_12` WHERE `hlth_12`.`wave` = 2015 GROUP BY `hlth_12`.`M24B_1` ) `患病率优化ing`;
+</code></pre>
+<p>有两个版本，由于第一个版本查询时间长，因此想到对Sql语句进行优化，关于这两个Sql语句的完整版本，可以参阅<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/resources/mybatis/mapper/sqlite/MedicalMapper.xml#L7" target="_blank">Version1.0</a>和<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/resources/mybatis/mapper/mysql/MedicalMapper.xml#L7" target="_blank">Version2.0</a>.</p>
+<p>在编写整体查询语句时，需注意患病率应保留两位小数，可以使用<code>Round()</code>函数。</p>
+<h2 is-upgraded>全局搜索</h2>
+<p>全局搜索因为要随意组合各种条件进行查询，因此Sql语句不是固定的，此处不妨编写选择所有条件进行编写一个最完整的Sql语句。</p>
+<p>伪Sql语句：</p>
+<pre><code language="language-sql" class="language-sql">SELECT 信息 FROM hlth_12 WHERE 条件=值 LIMIT 1000;
+</code></pre>
+<p>例子（部分）：</p>
+<pre><code language="language-sql" class="language-sql">SELECT Idind , wave AS `年份` , M26B AS `医疗帮助` FROM hlth_12 WHERE 
+</code></pre>
+<p>关于此Sql语句的完整版本，可参见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/resources/mybatis/mapper/sqlite/SearchMapper.xml" target="_blank">此处</a>。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="恭喜你！" duration="1">
+        <p>🎉恭喜你已经完成本节课程！在本次课程中，你已经学到：</p>
+<ul>
+<li>微观中国后端的需求有哪些</li>
+<li>后端的接口有哪些</li>
+<li>微观中国后端的开发模式是怎样的</li>
+<li>微观中国后端是如何处理数据库字段的</li>
+<li>微观中国后端是如何编写Sql语句的</li>
+<li>微观中国后端的配置文件有哪些</li>
+</ul>
+<h2 is-upgraded>下一步</h2>
+<p>下面的课程将带您继续探索微观中国后端的工作流程，它包括如何编写mapper层、service层、controller层的代码和测试打包等内容。</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="../../js/Inject.js"></script>
+
+</body>
+</html>
