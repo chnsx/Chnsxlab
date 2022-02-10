@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-02-10T19:31:33+08:00",
+  "id": "05微观中国后端工作流程(下)",
+  "duration": 86,
+  "title": "微观中国后端工作流程（下）",
+  "summary": "微观中国后端工作流程(下)",
+  "source": ".\\05微观中国后端工作流程（下）.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring boot",
+    "chns",
+    "后端"
+  ],
+  "tags": [],
+  "feedback": "https://github.com/chnsx",
+  "url": "05微观中国后端工作流程(下)"
+}

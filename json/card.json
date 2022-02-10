@@ -105,7 +105,8 @@
             "time": 47,
             "iconUrl": "/image/springboot.svg",
             "btnStatus": true,
-            "url": "./course/springboot01/index.html"
+            "url": "./course/springboot01/index.html",
+            "updated":"2022-01-25"
         },
         {
             "title": "02 创建Springboot项目",
@@ -113,7 +114,8 @@
             "time": 91,
             "iconUrl": "/image/springboot.svg",
             "btnStatus": true,
-            "url": "./course/springboot02/index.html"
+            "url": "./course/springboot02/index.html",
+            "updated":"2022-01-30"
         },
         {
             "title": "03 微观中国服务端简介",
@@ -121,7 +123,8 @@
             "time": 74,
             "iconUrl": "/image/springboot.svg",
             "btnStatus": true,
-            "url":"./course/springboot03/index.html"
+            "url":"./course/springboot03/index.html",
+            "updated":"2022-01-25"
         },
         {
             "title": "04 微观中国后端工作流程(上)",
@@ -129,10 +132,20 @@
             "time": 45,
             "iconUrl": "/image/springboot.svg",
             "btnStatus": true,
-            "url":"./course/springboot04/index.html"
+            "url":"./course/springboot04/index.html",
+            "updated":"2022-01-30"
         },
         {
-            "title": "05 扩展微观中国服务端功能",
+            "title": "05 微观中国后端工作流程(下)",
+            "author": "Iceberry",
+            "time": 45,
+            "iconUrl": "/image/springboot.svg",
+            "btnStatus": true,
+            "url":"./course/springboot05/index.html",
+            "updated":"2022-02-10"
+        },
+        {
+            "title": "06 扩展微观中国服务端功能",
             "author": "Iceberry",
             "time": 0,
             "iconUrl": "/image/springboot.svg",
