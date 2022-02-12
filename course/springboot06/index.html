@@ -1,0 +1,510 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>扩展微观中国服务端功能</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="06扩展微观中国服务端功能"
+                  title="扩展微观中国服务端功能"
+                  environment="web"
+                  feedback-link="https://github.com/chnsx">
+    
+      <google-codelab-step label="先决条件" duration="1">
+        <ul>
+<li>掌握微观中国服务端的编码流程</li>
+<li>熟悉软件开发流程，有良好的交流沟通能力</li>
+<li>有良好的团队协作精神</li>
+<li>懂得换位思考，合理安排任务</li>
+<li>对微观中国服务端建设有浓厚兴趣和信念， 正视软件开发行业</li>
+</ul>
+<p>这些先决条件包含了学习本节课程应具备的条件和知识，如果您不符合这些条目，请不必担心，您仍可按照本教程实现您的项目。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="需求分析并定义接口" duration="8">
+        <p>这次我们要为微观中国新增搜索功能，具体需求为：任意组合以下字段作为查询条件，均能查询出响应数据。</p>
+<p>供选择的字段：M26B、M40、M24B_1、M24B_2、M24B_2A、M24B_2B、M24B_3、M24B_4、M24B_5、M24B_6、M24B_7、M24B_8、M24B_9、M46A_0、M46A_1、M46A_2、M46A_3、M46A_4、M46A_5、M46A_6、M46A_7、M46A_8、M30、M36、M38、M39、M44、M50</p>
+<p>在接口设计时，考虑到为查询操作、查询条件繁多、查询条件个数不定等因素，决定将接口设计为GET请求方式，查询条件作为查询参数直接拼接在url后面的形式，于是接口设计如下：</p>
+<h2 is-upgraded>search</h2>
+<p><strong>描述</strong></p>
+<p>按照不定查询参数搜索相关数据。</p>
+<p><strong>接口URL格式</strong></p>
+<ul>
+<li>测试：http://localhost:8080/chnsx/search?{key}={value}&amp;{key}={value}&amp;{key}={value}......</li>
+</ul>
+<p><strong>返回数据格式</strong></p>
+<ul>
+<li>application/json</li>
+</ul>
+<p><strong>请求方式</strong></p>
+<ul>
+<li>GET</li>
+</ul>
+<p><strong>请求参数</strong></p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>名称</p>
+</td><td colspan="1" rowspan="1"><p>类型</p>
+</td><td colspan="1" rowspan="1"><p>是否必填</p>
+</td><td colspan="1" rowspan="1"><p>说明</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>key</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>是</p>
+</td><td colspan="1" rowspan="1"><p>要查询的条件键值对</p>
+</td></tr>
+</table>
+<p><strong>返回参数说明</strong></p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>名称</p>
+</td><td colspan="1" rowspan="1"><p>类型</p>
+</td><td colspan="1" rowspan="1"><p>说明</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>data</p>
+</td><td colspan="1" rowspan="1"><p>Array&lt;Object&gt;</p>
+</td><td colspan="1" rowspan="1"><p>返回的数据</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>status</p>
+</td><td colspan="1" rowspan="1"><p>Int</p>
+</td><td colspan="1" rowspan="1"><p>状态码(200:成功)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>message</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>返回的提示信息</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>timestamp</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>响应的时间戳</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>url</p>
+</td><td colspan="1" rowspan="1"><p>String</p>
+</td><td colspan="1" rowspan="1"><p>请求路径</p>
+</td></tr>
+</table>
+<p><strong>请求示例一</strong></p>
+<pre><code language="language-bash" class="language-bash">curl -X GET http://localhost:8080/chnsx/search -G -d &#39;M26B=3&#39; -v
+</code></pre>
+<p><strong>成功返回示例一（部分）</strong></p>
+<pre><code language="language-json" class="language-json">{
+    &#34;data&#34;: [
+        {
+            &#34;哮喘&#34;: &#34;0&#34;,
+            &#34;IDind&#34;: &#34;111101001001&#34;,
+            &#34;年份&#34;: &#34;2011&#34;,
+            &#34;头痛，头晕&#34;: &#34;1&#34;,
+            &#34;非传染性疾病&#34;: &#34;0&#34;,
+            &#34;胃痛&#34;: &#34;0&#34;,
+            &#34;其他传染病&#34;: &#34;0&#34;,
+            &#34;关节，肌肉疼痛&#34;: &#34;0&#34;,
+            &#34;耳眼病&#34;: &#34;0&#34;,
+            &#34;医疗帮助&#34;: &#34;3&#34;,
+            &#34;发烧，喉咙痛，咳嗽&#34;: &#34;0&#34;,
+            &#34;心脏病/胸痛&#34;: &#34;0&#34;,
+            &#34;治疗费用&#34;: &#34;8888&#34;,
+            &#34;皮疹，皮炎&#34;: &#34;0&#34;,
+            &#34;额外的花销在医疗上&#34;: &#34;0&#34;,
+            &#34;医生诊断&#34;: &#34;2&#34;,
+            &#34;腹泻，胃 痛&#34;: &#34;0&#34;
+        },
+        // ...... 数据过多，仅显示第一项
+    ],
+    &#34;message&#34;: &#34;OK&#34;,
+    &#34;url&#34;: &#34;http://localhost:8080/chnsx/search&#34;,
+    &#34;timestamp&#34;: &#34;2022-02-12 10:48:20 CST&#34;,
+    &#34;status&#34;: 200
+}
+</code></pre>
+<p><strong>请求示例二</strong></p>
+<pre><code language="language-bash" class="language-bash">curl -X GET http://localhost:8080/chnsx/search -G -d &#39;M26B=3&#39; -d &#39;M40=2&#39; -d &#39;M24B_3=1&#39; -v
+</code></pre>
+<p><strong>成功返回示例二</strong></p>
+<pre><code language="language-json" class="language-json">{
+    &#34;data&#34;: [
+        {
+            &#34;哮喘&#34;: &#34;0&#34;,
+            &#34;IDind&#34;: &#34;111101001001&#34;,
+            &#34;年份&#34;: &#34;2011&#34;,
+            &#34;头痛，头晕&#34;: &#34;1&#34;,
+            &#34;非传染性疾病&#34;: &#34;0&#34;,
+            &#34;胃痛&#34;: &#34;0&#34;,
+            &#34;其他传染病&#34;: &#34;0&#34;,
+            &#34;关节，肌肉疼痛&#34;: &#34;0&#34;,
+            &#34;耳眼病&#34;: &#34;0&#34;,
+            &#34;医疗帮助&#34;: &#34;3&#34;,
+            &#34;发烧，喉咙痛，咳嗽&#34;: &#34;0&#34;,
+            &#34;心 脏病/胸痛&#34;: &#34;0&#34;,
+            &#34;治疗费用&#34;: &#34;8888&#34;,
+            &#34;皮疹，皮炎&#34;: &#34;0&#34;,
+            &#34;额外的花销在医疗上&#34;: &#34;0&#34;,
+            &#34;医生诊断&#34;: &#34;2&#34;,
+            &#34;腹泻，胃 痛&#34;: &#34;0&#34;
+        },
+        // ...... 数据过多，仅显示第一项
+    ],
+    &#34;message&#34;: &#34;OK&#34;,
+    &#34;url&#34;: &#34;http://localhost:8080/chnsx/search&#34;,
+    &#34;timestamp&#34;: &#34;2022-02-12 11:05:56 CST&#34;,
+    &#34;status&#34;: 200
+}
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="数据处理" duration="8">
+        <h2 is-upgraded>编写中英文对照表</h2>
+<p>根据chns数据的说明文件<code>chns2015-csv.rar\chns2015-csv\1-codebook\htlh_12.pdf</code>，将搜索接口需要的字段全部语义化。</p>
+<pre><code language="language-yaml" class="language-yaml">`身体状况（M24B_1 *字段）`
+M24B_1=发烧，喉咙痛，咳嗽
+M24B_2=腹泻，胃痛
+M24B_2A=胃痛
+M24B_2B=哮喘
+M24B_3=头痛，头晕
+M24B_4=关节，肌肉疼痛
+M24B_5=皮疹，皮炎
+M24B_6=眼耳病
+M24B_7=心脏病/胸痛
+M24B_8=其他传染病
+M24B_9=非传染性疾病
+`免疫注射（M46A_0 *字段）`
+M46A_0=卡介苗
+M46A_1=麻疹
+M46A_2=百白破
+M46A_3=脊髓灰质炎
+M46A_4=流感脑炎
+M46A_5=脑炎B
+M46A_6=甲型肝炎
+M46A_7=乙型肝炎
+M46A_8 =其他
+`医疗帮助(M26B字段)`
+M26B_1=自我护理
+M26B_2=向当地的健康工作者求助
+M26B_3=看医生
+M26B_4=完全没关注
+M26B_9=未知
+`医生诊断（M40字段）`
+M40_0=没有诊断
+M40_1=传染性疾病/寄生虫病
+M40_2=心脏病  
+M40_3=肿瘤
+M40_4=呼吸道疾病
+M40_5=损伤
+M40_6=酒精中毒
+M40_7=内分泌紊乱
+M40_8 =血液病
+M40_9=精神障碍/精神失常
+M40_10=智力低下
+M40_11=神经系统疾病
+M40_12=眼部/耳部/喉部/鼻部/牙齿 疾病
+M40_13=消化系统疾病 
+M40_14=泌尿系统疾病
+M40_15=性功能障碍
+M40_16=妇产科疾病、
+M40_17=新生儿疾病
+M40_18=皮肤病
+M40_19=肌肉/风湿病
+M40_20=遗传病
+M40_21=老年/中年综合征
+M40_22=其它
+`花销（M30 *字段 ）`
+M30=治疗费用
+M36=第二个地点的治疗费用
+M38=额外的花销在医疗上
+M39= 花在疾病或受伤上的钱
+M44=过去12个月免疫接种的花销
+M50= 预防性服务的费用
+</code></pre>
+<h2 is-upgraded>编写Sql语句</h2>
+<p>现编写一条包含所有筛选条件的Sql语句：</p>
+<pre><code language="language-sql" class="language-sql">SELECT
+  Idind,
+  wave AS ` 年份 `,
+  M26B AS ` 医疗帮助 `,
+  M40 AS ` 医生诊断 `,
+  M24B_1 AS ` 发烧 ， 喉咙痛 ， 咳嗽 `,
+  M24B_2 AS ` 腹泻 ， 胃痛 `,
+  M24B_2A AS ` 胃痛 `,
+  M24B_2B AS ` 哮喘 `,
+  M24B_3 AS ` 头痛 ， 头晕 `,
+  M24B_4 AS ` 关节 ， 肌肉疼痛 `,
+  M24B_5 AS ` 皮疹 ， 皮炎 `,
+  M24B_6 AS ` 耳眼病 `,
+  M24B_7 AS ` 心脏病 / 胸痛 `,
+  M24B_8 AS ` 其他传染病 `,
+  M24B_9 AS ` 非传染性疾病 `,
+  M46A_0 AS ` 卡介苗 `,
+  M46A_1 AS ` 麻疹 `,
+  M46A_2 AS ` 百白破 `,
+  M46A_3 AS ` 脊髓灰质炎 `,
+  M46A_4 AS ` 流感脑炎 `,
+  M46A_5 AS ` 脑炎B `,
+  M46A_6 AS ` 甲型肝炎 `,
+  M46A_7 AS ` 乙型肝炎 `,
+  M46A_8 AS ` 其他 `,
+  M30 AS ` 治疗费用 `,
+  M36 AS ` 第二个地点的治疗费用 `,
+  M38 AS ` 额外的花销在医疗上 `,
+  M39 AS ` 花在疾病或受伤上的钱 `,
+  M44 AS ` 过去12个月免疫接种的花销 `,
+  M50 AS ` 预防性服务的费用 `
+FROM
+  hlth_12
+WHERE
+  M26B = 3
+  AND M40 = 1
+  AND M24B_1 = 1
+  AND M24B_2 = 1
+  AND M24B_2A = 1
+  AND M24B_2B = 1
+  AND M24B_3 = 1
+  AND M24B_4 = 1
+  AND M24B_5 = 1
+  AND M24B_6 = 1
+  AND M24B_7 = 1
+  AND M24B_8 = 1
+  AND M24B_9 = 1
+  AND M46A_0 = 1
+  AND M46A_1 = 1
+  AND M46A_2 = 1
+  AND M46A_3 = 1
+  AND M46A_4 = 1
+  AND M46A_5 = 1
+  AND M46B_6 = 1
+  AND M46B_7 = 1
+  AND M46B_8 = 1
+  AND M30 = 1
+  AND M36 = 1
+  AND M38 = 1
+  AND M39 = 1
+  AND M44 = 1
+  AND M50 = 1
+LIMIT
+  1000
+</code></pre>
+<aside class="warning"><p>此处在Sql语句中直接通过<code>AS</code>方式将字段转换为中文，由于不同种类数据库使用的修饰符不同和运行环境差异，会导致乱码或报错的情况，就需要维护多种数据库下的Sql语句，应尽量避免。</p>
+</aside>
+<h2 is-upgraded>动态化Sql语句</h2>
+<p>由于查询条件是动态组合的，数量不一，需要动态生成Sql语句，现在考虑两种解决方法：1.动态拼接Sql字符串；2.使用Mybatis动态SQL。</p>
+<p>前一种方法在阿里巴巴Java开发手册中有明确说明是绝对禁止的，因此我们采用第二种方法。</p>
+<p class="image-container"><img alt="image-阿里巴巴Java开发手册截图" src="img\\4039d4e1f342bf22.png"></p>
+<p>我们使用<code>if</code>标签包裹每一个筛选条件，当if条件为真时，则添加此筛选条件，否则将被排除掉，这提供了极大的方便。部分mapper映射文件内容如下：</p>
+<pre><code language="language-xml" class="language-xml">&lt;select&gt;
+    SELECT Idind,wave AS `年份`, M26B AS `医疗帮助`, M40 AS `医生诊断`, M24B_1 AS `发烧，喉咙痛，咳嗽`, M24B_2 AS `腹泻，胃痛`, M24B_2A AS `胃痛` , M24B_2B AS `哮喘`, M24B_3 AS `头痛，头晕`, M24B_4 AS `关节，肌肉疼痛`, M24B_5 AS `皮疹，皮炎`, M24B_6 AS `耳眼病` , M24B_7 AS `心脏病/胸痛`, M24B_8 AS `其他传染病`, M24B_9 AS `非传染性疾病`, M46A_0 AS `卡介苗`, M46A_1 AS `麻疹` , M46A_2 AS `百白破`, M46A_3 AS `脊髓灰质炎`, M46A_4 AS `流感脑炎`, M46A_5 AS `脑炎B`, M46A_6 AS `甲型肝炎` , M46A_7 AS `乙型肝炎`, M46A_8 AS `其他`, M30 AS `治疗费用`, M36 AS `第二个地点的治疗费用`, M38 AS `额外的花销在医疗上` , M39 AS `花在疾病或受伤上的钱`, M44 AS `过去12个月免疫接种的花销`, M50 AS `预防性服务的费用` FROM hlth_12
+    &lt;where&gt;
+        &lt;if test=&#34;M26B!=null&#34;&gt;AND M26B = #{M26B}&lt;/if&gt;
+        &lt;if test=&#34;M40!=null&#34;&gt;AND M40 = #{M40}&lt;/if&gt;
+        &lt;if&gt;......&lt;/if&gt;
+    &lt;/where&gt;
+    LIMIT 1000
+&lt;/select&gt;
+</code></pre>
+<p>到此，数据处理完毕。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="开始编码" duration="15">
+        <h2 is-upgraded>编写mapper层和映射文件</h2>
+<p>新建<code>src/main/java/com/iceberry/mapper/SearchMapper.java</code>接口用于处理数据库中与搜索相关的数据，在类名上添加<code>@Repository</code>注解以将其添加到Spring的Bean容器中。现在该类中的代码应该如下所示：</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.mapper;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface SearchMapper {}
+</code></pre>
+<p>下面我们需要为实现接口1提供一个mapper层抽象方法<code>searchByCondition</code>，改方法接收一个包含所有查询条件的Map对象，返回值类型为<code>List<Map></code>，该方法所使用的Sql语句使用<code>@Select</code>注解标识，此时，该方法可以根据Sql语句将查询到的数据整合为一个List对象返回。该方法的代码如下所示：</p>
+<pre><code language="language-java" class="language-java">/**
+ * 根据conditions中包含的数据进行筛选
+ *
+ * @param conditions 条件
+ * @return 查询的结果
+ */
+List&lt;Map&lt;String, Object&gt;&gt; searchByCondition(Map&lt;String, Object&gt; conditions);
+</code></pre>
+<p>新建<code>/src/main/resources/mybatis/mapper/mysql/SearchMapper.xml</code>文件用于存放实现搜索功能的Sql语句。为实现该接口，我们需要创建一个<code>mapper</code>标签，其<code>namespace</code>属性为实现该接口的mapper接口的绝对路径。实现该接口需要使用查询语句，于是建立<code>select</code>标签，其<code>id</code>属性为在对应<code>mapper</code>接口中负责处理该行为的抽象方法名，<code>resultType</code>属性为Mybatis框架执行操作后应返回的java数据类型。</p>
+<pre><code language="language-xml" class="language-xml">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;
+&lt;!DOCTYPE mapper
+        PUBLIC &#34;-//mybatis.org//DTD Mapper 3.0//EN&#34;
+        &#34;http://mybatis.org/dtd/mybatis-3-mapper.dtd&#34;&gt;
+&lt;mapper namespace=&#34;com.iceberry.mapper.SearchMapper&#34;&gt;
+    &lt;select id=&#34;searchByCondition&#34; resultType=&#34;Map&#34; parameterType=&#34;Map&#34;&gt;
+
+		SELECT Idind,wave AS `年份`, M26B AS `医疗帮助`, M40 AS `医生诊断`, M24B_1 AS `发烧，喉咙痛，咳嗽`, M24B_2 AS `腹泻，胃痛`, M24B_2A AS `胃痛` , M24B_2B AS `哮喘`, M24B_3 AS `头痛，头晕`, M24B_4 AS `关节，肌肉疼痛`, M24B_5 AS `皮疹，皮炎`, M24B_6 AS `耳眼病` , M24B_7 AS `心脏病/胸痛`, M24B_8 AS `其他传染病`, M24B_9 AS `非传染性疾病`, M46A_0 AS `卡介苗`, M46A_1 AS `麻疹` , M46A_2 AS `百白破`, M46A_3 AS `脊髓灰质炎`, M46A_4 AS `流感脑炎`, M46A_5 AS `脑炎B`, M46A_6 AS `甲型肝炎` , M46A_7 AS `乙型肝炎`, M46A_8 AS `其他`, M30 AS `治疗费用`, M36 AS `第二个地点的治疗费用`, M38 AS `额外的花销在医疗上` , M39 AS `花在疾病或受伤上的钱`, M44 AS `过去12个月免疫接种的花销`, M50 AS `预防性服务的费用` FROM hlth_12
+		&lt;where&gt;
+			&lt;if test=&#34;M26B!=null&#34;&gt;AND M26B = #{M26B}&lt;/if&gt;
+			&lt;if test=&#34;M40!=null&#34;&gt;AND M40 = #{M40}&lt;/if&gt;
+            ......
+        &lt;/where&gt;
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre>
+<p>👉关于此映射文件的完整版本详见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/resources/mybatis/mapper/sqlite/SearchMapper.xml" target="_blank">SearchMapper.xml</a>.</p>
+<h2 is-upgraded>编写Service层</h2>
+<p>创建<code>src/main/java/com/iceberry/service/SearchService.java</code>接口。在接口中定义实现搜索接口需求的抽象方法<code>searchByCondition</code>，该方法接收一个参数<code>conditions</code>，返回类型为List对象：</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.service;
+
+import java.util.List;
+import java.util.Map;
+
+public interface SearchService {
+
+    /**
+     * 根据conditions中包含的数据进行筛选
+     *
+     * @param conditions 条件
+     * @return 查询的结果
+     */
+    List&lt;Map&lt;String, Object&gt;&gt; searchByCondition(Map&lt;String, Object&gt; conditions);
+}
+</code></pre>
+<p>创建<code>/src/main/java/com/iceberry/service/impl/SearchServiceImpl.java</code>实现类实现<code>SearchService</code>接口。使用Service注解标注其为一个Spring Bean对象。</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.service.impl;
+
+import com.iceberry.service.SearchService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SearchServiceImpl implements SearchService {}
+</code></pre>
+<p>自动注入<code>searchMapper</code>对象用于获取从数据库中查询到的数据。</p>
+<pre><code language="language-java" class="language-java">@Autowired
+private SearchMapper searchMapper;
+</code></pre>
+<p>重写<code>searchByCondition</code>方法用于实现具体的数据处理操作：</p>
+<pre><code language="language-java" class="language-java">@Override
+public List&lt;Map&lt;String, Object&gt;&gt; searchByCondition(Map&lt;String, Object&gt; conditions) {
+    //此处直接返回Mapper层查询到的数据即可
+    return searchMapper.searchByCondition(conditions);
+}
+</code></pre>
+<p>👉至此，Service层实现完毕，完整代码详见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/java/com/iceberry/service/SearchService.java" target="_blank">searchByCondition.java</a>和<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/java/com/iceberry/service/impl/SearchServiceImpl.java" target="_blank">SearchServiceImpl.java</a>.</p>
+<h2 is-upgraded>编写切面</h2>
+<p>此接口的去重切面和全局异常处理切面与前述内容并无相异之处，此处不再赘述。</p>
+<p>👉完整代码详见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/java/com/iceberry/aspect/SearchApiAspect.java" target="_blank">SearchApiAspect.java</a></p>
+<h2 is-upgraded>编写Controller层</h2>
+<p>新建<code>src/main/java/com/iceberry/controller/SearchController.java</code>控制器，使用注解标注处理路径为<code>/search</code>，并自动注入一个<code>searchService</code>对象，此时类中代码应如下所示：</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.controller;
+
+import com.iceberry.service.SearchService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(&#34;/search&#34;)
+public class SearchController {
+    @Autowired
+    private SearchService searchService;
+}
+</code></pre>
+<p>新增<code>doSearch</code>方法用于处理搜索请求，新建用于存储搜索条件的<code>condition</code>键值对对象和用于向前端返回的<code>restfulMap</code>对象，将请求参数装载至<code>condition</code>对象后调用<code>searchSevice.searchByCondition()</code>方法获取数据后将其装载至<code>restfulMap</code>中并向外返回。</p>
+<pre><code language="language-java" class="language-java">@GetMapping
+public Map&lt;String, Object&gt; doSearch(HttpServletRequest request) {
+    Map&lt;String, Object&gt; conditions = new HashMap&lt;&gt;();
+    Map&lt;String, Object&gt; restfulMap = new HashMap&lt;&gt;();
+    Set&lt;String&gt; parameterKeys = request.getParameterMap().keySet();
+    request.getParameterMap();
+    for (String key : parameterKeys) {
+        conditions.put(key, request.getParameter(key));
+    }
+    List&lt;Map&lt;String, Object&gt;&gt; maps = searchService.searchByCondition(conditions);
+    restfulMap.put(&#34;data&#34;, maps);
+    return restfulMap;
+}
+</code></pre>
+<p>👉至此Controller层实现完毕，完整代码详见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/main/java/com/iceberry/controller/SearchController.java" target="_blank">SearchController.java</a>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="测试发布" duration="6">
+        <h2 is-upgraded>单元测试</h2>
+<p>以测试Mapper层为例：测试Mapper层的searchByCondition方法从数据库中能否获取到数据，将获取到的数据打印在控制台。</p>
+<p>创建<code>src/test/java/com/iceberry/mapper/SearchMapperTests.java</code>测试类，使用<code>@SpringBootTest</code>注解标注该类为测试类，并自动注入searchMapper对象，然后创建一个标有<code>@Test</code>注解的searchByConditionTest方法为一个测试单元。</p>
+<pre><code language="language-java" class="language-java">package com.iceberry.mapper;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class SearchMapperTests {
+    @Autowired
+    private SearchMapper searchMapper;
+
+    @Test
+    public void searchByConditionTest(){}
+}
+</code></pre>
+<p>接着在方法内编写测试逻辑即可，此处将mapper层获取到的数据打印在控制台。</p>
+<pre><code language="language-java" class="language-java">@Test
+public void searchByConditionTest(){
+    Map&lt;String,Object&gt; conditions=new HashMap&lt;&gt;();
+    conditions.put(&#34;M26B&#34;,3);
+    conditions.put(&#34;M40&#34;,2);
+    conditions.put(&#34;M24B_3&#34;,1);
+    conditions.put(&#34;M30&#34;,8888);
+
+    List&lt;Map&lt;String, Object&gt;&gt; list = searchMapper.searchByCondition(conditions);
+    for (Map&lt;String, Object&gt; map : list) {
+        System.out.println(map);
+    }
+}
+</code></pre>
+<p>之后点击方法前面的▶按钮即可运行该测试，当测试成功时，会显示√和Tests passed字样，测试失败时，会显示红色的Tests failed字样和错误堆栈信息。</p>
+<p>👉至此Mapper层测试已实现，完整代码详见<a href="https://github.com/chnsx/chnsx-backend/blob/main/src/test/java/com/iceberry/mapper/SearchMapperTests.java" target="_blank">searchByConditionTest.java</a>.</p>
+<p>尝试任意组合搜索条件，可以查看不同测试结果下的不同表现。</p>
+<h2 is-upgraded>部署发布</h2>
+<p>您需要使用maven工具进行打包，如果您使用IDEA，则直接点击侧边maven选项卡&gt;<code>package</code>即可。</p>
+<p>打包完成后可在本地或容器中运行或者上传至您的服务器中使用。</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="更新文档" duration="2">
+        <p>此处的文档主要是指Api文档，当您实现一个新的功能功能时，应及时更新您的Api文档，这样所有开发组人员将会及时知晓新的接口功能。您可以使用多种工具生成Api文档，或者您也可以手动编写。</p>
+<p>如果您手动编写Api文档，就如本课程第二小节那样，那么只需使用Word或者Markdown采用一种统一的格式编写即可。</p>
+<p>如果您是使用其它工具生成Api文档，则需要遵照其格式编写，更多细节您可以参阅工具的参考文档。</p>
+<p>现推荐几种可以生成Api接口的工具：</p>
+<ul>
+<li><a href="https://swagger.io/" target="_blank">SmartBear Swagger</a></li>
+<li><a href="https://www.postman.com/" target="_blank">Postman</a></li>
+<li><a href="http://yapi.smart-xwork.cn/" target="_blank">YApi</a></li>
+<li><a href="https://www.apipost.cn/" target="_blank">ApiPost</a></li>
+<li><a href="https://www.apifox.cn/" target="_blank">Apifox</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="写在后面" duration="1">
+        <p>恭喜你已经完成本课程的全部内容，这意味着你已经完成微观中国后端的全套课程的学习！🎊</p>
+<p>虽然微观中国后端的课程已经完结，但是随着微观中国项目的不断向前发展，一定会有新的内容产生，您也可以参与到我们的文档编写工作中来，只需要在我们的教程网站主页点击<a href="https://github.com/chnsx/Chnsxlab/pulls" target="_blank">提交内容</a>按钮即可。我们的文档采用<a href="https://www.markdownguide.org/" target="_blank">Markdown</a>格式编写，使用<a href="https://github.com/googlecodelabs/tools" target="_blank">Codelab</a>工具生成html页面，托管在<a href="https://pages.github.com/" target="_blank">Github Page</a>上。</p>
+<p>在您阅读到此处时，您可能仍然对某些概念和内容感到生疏或不解，您可以在阅读的同时动手编码以体验该项目的实现全过程，您可以将您的问题以<a href="https://github.com/chnsx/Chnsxlab/issues" target="_blank">Issues</a>的形式发送给我们，我们会尽快回复。</p>
+<p>四年时光若白驹之过隙，忽然而已。当一个人即将离开，总想着留下点什么，该文档历经难产之后终于成型，也算是留给后来人的一点礼物吧。</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+  <script src="../../js/Inject.js"></script>
+
+</body>
+</html>

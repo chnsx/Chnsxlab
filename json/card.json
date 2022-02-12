@@ -147,9 +147,11 @@
         {
             "title": "06 扩展微观中国服务端功能",
             "author": "Iceberry",
-            "time": 0,
+            "time": 41,
             "iconUrl": "/image/springboot.svg",
-            "btnStatus": false
+            "btnStatus": true,
+            "url":"./course/springboot06/index.html",
+            "updated":"2022-02-12"
         }
     ],
     "Vue": [

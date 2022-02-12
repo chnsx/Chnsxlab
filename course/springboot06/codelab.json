@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-02-12T15:59:23+08:00",
+  "id": "06扩展微观中国服务端功能",
+  "duration": 41,
+  "title": "扩展微观中国服务端功能",
+  "summary": "扩展微观中国服务端功能",
+  "source": ".\\06扩展微观中国服务端功能.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "spring boot",
+    "chns",
+    "后端"
+  ],
+  "tags": [],
+  "feedback": "https://github.com/chnsx",
+  "url": "06扩展微观中国服务端功能"
+}
