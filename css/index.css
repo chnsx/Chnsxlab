@@ -45,7 +45,6 @@ body {
 
 .Sort-title {
     font-size: larger;
-    /* border-left: 0.3rem coral solid; */
     border-left-width: 0.3rem;
     border-left-style: solid;
     padding: 0 0 0 1rem;
@@ -56,13 +55,12 @@ body {
     margin: auto;
     padding-block-start: 4rem;
     padding-block-end: 4rem;
+    /* scroll-behavior: smooth; */
 }
 
 .Card {
     width: 17rem;
     height: 120px;
-    /* border-left: 0.3rem coral solid; */
-    /* border-left: 0.3rem solid; */
     border-left-width: 0.3rem;
     border-left-style: solid;
     padding: 1.5rem;
@@ -72,10 +70,6 @@ body {
     box-shadow: 0px 0px 4px 0px #00000021;
     transition: box-shadow 300ms ease-out;
 }
-
-/* .Card:hover {
-    box-shadow: 0px 0px 4px 4px #ff7f5033;
-} */
 
 .Card-title {
     font-weight: bolder;
@@ -96,18 +90,27 @@ body {
 }
 
 .Card-content-btn {
-    /* background-color: coral; */
     border: 0;
     padding: 3% 8% 3% 8%;
     color: white;
     border-radius: 2rem;
     font-weight: 600;
     font-size: medium;
-    /* cursor: pointer; */
 }
 .Card-content-btn-link{
     text-decoration: none;
     color: white;
+    position: relative;
+}
+
+.Card-content-btn-link::before {
+    content: "";
+    position: absolute;
+    top: -7.3rem;
+    /* background-color: aliceblue; */
+    right: -3rem;
+    bottom: -2.1rem;
+    left: -15rem;
 }
 
 .Course-list {
@@ -130,16 +133,28 @@ body {
 .Card-extra {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     color: gray;
     font-size: small;
     font-weight: lighter;
+    row-gap: 0.3rem
+}
+
+.Card-extra-time,.Card-extra-updated{
+    text-align: end;
+}
+.Card-extra-updated{
+    width: 100%;
+}
+
+.Card-extra-author,.Card-extra-time{
+    width: 50%;
 }
 
 .Index {
     margin: 4rem 0 0 0;
     width: 100%;
-    /* height: 689px; */
     background-color: black;
     display: flex;
     align-items: center;
@@ -151,6 +166,7 @@ body {
     font-size: xxx-large;
     font-weight: bolder;
     margin-block: 2rem;
+    animation-delay: 80ms !important;
 }
 
 .Intro-desp {
@@ -159,6 +175,7 @@ body {
     margin: 1rem 0;
     max-inline-size: 65%;
     text-transform: capitalize;
+    animation-delay: 160ms !important;
 }
 
 .Introduction {
@@ -168,12 +185,43 @@ body {
     position: absolute;
 }
 
+.Intro-title,.Intro-desp,.Intro-btn{
+    -webkit-animation: fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation: fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@-webkit-keyframes fade-in-bottom {
+    0% {
+      -webkit-transform: translateY(50px);
+              transform: translateY(50px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes fade-in-bottom {
+    0% {
+      -webkit-transform: translateY(50px);
+              transform: translateY(50px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
 .Intro-btn {
     font-size: medium;
     padding: 0.8rem 0.8rem;
     border-radius: 2rem;
     border: 0;
     margin-block-start: 1rem;
+    animation-delay: 240ms !important;
 }
 
 .Footer {
@@ -210,6 +258,10 @@ body {
 .link{
     color: white;
     text-decoration: none;
+}
+
+.link:hover {
+    color: cornflowerblue;
 }
 
 @media screen and (max-width:1008px) and (min-width:668px) {

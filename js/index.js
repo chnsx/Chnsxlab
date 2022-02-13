@@ -7,7 +7,7 @@
  */
 // import { mockData } from '../js/Mock.js';
 import api from './Api.js';
-import { injectCourseListOfAllLang, injectCoursesCss } from './Template.js';
+import { injectCourseListOfAllLang, injectCoursesCssV2 } from './Template.js';
 
 window.onload = function () {
     printLogo()
@@ -19,7 +19,7 @@ window.onload = function () {
         api.getCourseColor(function onSuccess(status, data) {
             const courseColor = JSON.parse(data)
             injectCourseContent(courseList)
-            injectCoursesStyle(injectCoursesCss(Object.keys(courseList), courseColor))
+            injectCoursesStyle(injectCoursesCssV2(Object.keys(courseList), courseColor))
         }, function onError(status, msg) {
             //TODO 错误处理
             console.log(`[onError]status:${status},msg:${msg}`)
