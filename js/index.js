@@ -6,6 +6,7 @@
  * @description Script for index page
  */
 // import { mockData } from '../js/Mock.js';
+import { loadingVM } from './Viewmodel.js';
 import api from './Api.js';
 import { injectCourseListOfAllLang, injectCoursesCssV2 } from './Template.js';
 
@@ -20,6 +21,7 @@ window.onload = function () {
             const courseColor = JSON.parse(data)
             injectCourseContent(courseList)
             injectCoursesStyle(injectCoursesCssV2(Object.keys(courseList), courseColor))
+            loadingVM.isLoading=false
         }, function onError(status, msg) {
             //TODO 错误处理
             console.log(`[onError]status:${status},msg:${msg}`)
