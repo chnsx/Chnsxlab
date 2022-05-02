@@ -104,6 +104,15 @@
             "time": 0,
             "iconUrl": "/image/vue.svg",
             "btnStatus": false
+        },
+        {
+            "title": "08 前端复现视频教学",
+            "author": "VanHelsing",
+            "time": 360,
+            "iconUrl": "/image/vue.svg",
+            "btnStatus": true,
+            "url":"./video.html",
+            "updated":"2022-05-02"
         }
     ]
 }
