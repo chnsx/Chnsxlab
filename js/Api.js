@@ -5,7 +5,7 @@
  * @version 1.0
  * @description apis for get course data
  */
-const baseUrl = "http://192.168.0.106:5500"
+ const baseUrl = "https://chnsx.github.io/Chnsxlab"
 
 let xhr = new XMLHttpRequest();
 
