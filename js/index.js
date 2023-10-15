@@ -5,32 +5,33 @@
  * @version 1.0
  * @description Script for index page
  */
-// import { mockData } from '../js/Mock.js';
 import { loadingVM } from './Viewmodel.js';
-import api from './Api.js';
 import { injectCourseListOfAllLang, injectCoursesCssV2 } from './Template.js';
+import { getCourseData, getCourseColor } from './Api.js';
 
 window.onload = function () {
     printLogo()
     adjustIndexSize()
 
-    //XXX Please help me improve this nested code
-    api.getCourseData(function onSuccess(status, data) {
-        const courseList = JSON.parse(data)
-        api.getCourseColor(function onSuccess(status, data) {
-            const courseColor = JSON.parse(data)
-            injectCourseContent(courseList)
-            injectCoursesStyle(injectCoursesCssV2(Object.keys(courseList), courseColor))
-            loadingVM.isLoading=false
-        }, function onError(status, msg) {
-            //TODO 错误处理
-            console.log(`[onError]status:${status},msg:${msg}`)
-        })
+    getCourse()
+}
 
-    }, function onError(status, msg) {
-        //TODO 错误处理
-        console.log(`[onError]status:${status},msg:${msg}`)
-    })
+async function getCourse() {
+    try {
+        const dataResponse = await getCourseData()
+        if (!dataResponse.ok) throw new Error(`Can't fetch courseData.`)
+        const courseList = await dataResponse.json()
+
+        const colorResponse = await getCourseColor()
+        if (!colorResponse.ok) throw new Error(`Can't fetch courseColor.`)
+        const courseColorList = await colorResponse.json()
+
+        injectCourseContent(courseList)
+        injectCoursesStyle(injectCoursesCssV2(Object.keys(courseList), courseColorList))
+        loadingVM.isLoading = false
+    } catch (e) {
+        log.Error(e)
+    }
 }
 
 window.onresize = function () {

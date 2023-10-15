@@ -111,7 +111,7 @@
             "time": 360,
             "iconUrl": "/image/vue.svg",
             "btnStatus": true,
-            "url":"./video.html",
+            "url":"http://43.138.57.162:8087/video.html",
             "updated":"2022-05-02"
         }
     ]
