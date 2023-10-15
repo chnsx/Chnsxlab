@@ -30,12 +30,3 @@ Chnsxlab是为微观中国项目的开发人员提供教学，帮助开发人员
 * [Codelab](https://github.com/googlecodelabs/tools)
 * [Flutter Codelabs](https://codelabs.developers.google.com/?product=flutter)
 * [Animista](https://animista.net/)
-
-## Donate
-
-<details>
-<summary markdown="span">Expand</summary>
-
-<img src="donate.png" alt="qrcode" style="zoom:50%;" />
-
-</details>
