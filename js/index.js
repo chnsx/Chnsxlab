@@ -30,7 +30,7 @@ async function getCourse() {
         injectCoursesStyle(injectCoursesCssV2(Object.keys(courseList), courseColorList))
         loadingVM.isLoading = false
     } catch (e) {
-        log.Error(e)
+        console.error(e)
     }
 }
 
